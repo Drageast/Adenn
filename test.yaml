@@ -1,0 +1,19 @@
+Control: [2435]
+
+ID:
+  2435: # ID
+    Name: "Test" # Name des Shimaris
+    Description: "Test Beschreibung" # Beschreibung des Shimaris
+    URL: # URLS
+      Avatar: "www.imgur.com/test" # Avatar des Shimaris
+    Data:
+      BasisEnergie: 100 # Angriffe Kosten energie je nach schaden
+      Angriffskosten: [10, 25, 50] #Angriffsskosten pro Stufe -- [1 - Stufe des Angriffs, 10 - Kosten der Energie]
+      Leben: 1000 # HP
+      Schaden: [50, 80, 125] # Schaden in HP je nach Angriffsstufe -- [1 - Stufe des Angriffs, 80 - Schaden in HP]
+      Element: "Psio" # Schadenstyp des Shimari
+      Resistenz: "Elec" #Schadensresitenz gegen Element um 10 SchadensPunkte
+      Seltenheit: 4 # 1 -Normal, 2 - Selten, 3 - Legendär, 4 - Exotisch
+                      # Zeigt die Höchst-Mögliche Seltenheit
+                      # BasisEnergie + 10, Leben + 100, Resistenz + 5
+                      # KEINEN EFFEKT AUF NORMAL!

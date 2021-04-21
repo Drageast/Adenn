@@ -1,0 +1,14 @@
+# System
+pip
+requests
+dnspython
+PyNaCl
+async-timeout
+pyyaml
+pymongo
+aiohttp
+
+# Discord
+discord~=1.0.1
+discord.py
+DiscordUtils
