@@ -5,7 +5,7 @@ import discord
 from .MongoDataBase import Uccounts
 
 # Util
-from .Utilities import Farbe, SMOOTH, Wrappers
+from .Utilities import Farbe, Messaging, Wrappers
 
 
 # Lokale_Variablen
@@ -466,7 +466,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) == 21:
                 embed = discord.Embed(
@@ -481,7 +481,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(dealer) > 21 and BlackJack_Bot.pointCount(player) > 21:
                 embed = discord.Embed(
@@ -495,7 +495,7 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(dealer) > 21 > BlackJack_Bot.pointCount(player):
                 embed = discord.Embed(
@@ -510,7 +510,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) > 21 > BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
@@ -525,7 +525,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(dealer) > BlackJack_Bot.pointCount(player):
                 embed = discord.Embed(
@@ -540,7 +540,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) > BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
@@ -555,7 +555,7 @@ class BlackJack_Bot:
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
                 await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) == BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
@@ -569,7 +569,7 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
             else:
 
@@ -583,7 +583,7 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                return await SMOOTH.Embed_edit(m, embed, 8)
+                return await Messaging.Universal_edit(m, embed)
 
 
 # noinspection PyTypeChecker

@@ -5,6 +5,8 @@ import sys
 import time
 import asyncio
 from .ErrorHandler import YAMLError
+import discord
+from discord.ext import commands
 
 
 class Object(object):
@@ -87,108 +89,191 @@ class YAML:
             sys.exit(EnvironmentError("Das Passwort ist Falsch!"))
 
 
+class Messaging:
 
-class SMOOTH:
-
-    @staticmethod
-    async def Embed_ctx(ctx, embed, seconds=None):
-
-        seconds_ = seconds if seconds is not None else 10
-
-        try:
-            await ctx.message.delete()
-            m = await ctx.send(embed=embed)
-            await asyncio.sleep(seconds_)
-            await m.delete()
-        except:
-            pass
 
     @staticmethod
-    async def Embed_message(message, embed, seconds=None):
+    async def Universal_send(context: [commands.Context, discord.Message], obj: [discord.Embed, discord.File, str], seconds: float = 8):
 
-        seconds_ = seconds if seconds is not None else 10
+        # Embed Check
+        if isinstance(obj, discord.Embed):
 
-        try:
-            await message.delete()
-        except:
-            pass
-            m = await message.channel.send(embed=embed)
-            await asyncio.sleep(seconds_)
-        try:
-            await m.delete()
-        except:
-            pass
+            if isinstance(context, commands.Context):
+
+                try:
+                    await context.message.delete()
+                except:
+                    pass
+                try:
+                    m = await context.send(embed=obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            elif isinstance(context, discord.Message):
+
+                try:
+                    await context.delete()
+                except:
+                    pass
+                try:
+                    m = await context.channel.send(embed=obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            else:
+                raise AttributeError("Context ist nicht: [commands.Context, discord.Message]")
+
+        # Nachricht Check
+        elif isinstance(obj, str):
+
+            if isinstance(context, commands.Context):
+
+                try:
+                    await context.message.delete()
+                except:
+                    pass
+                try:
+                    m = await context.send(obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            elif isinstance(context, discord.Message):
+
+                try:
+                    await context.delete()
+                except:
+                    pass
+                try:
+                    m = await context.channel.send(obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            else:
+                raise AttributeError("Context ist nicht: [commands.Context, discord.Message]")
+
+        # Datei Check
+        elif isinstance(obj, discord.File):
+
+            if isinstance(context, commands.Context):
+
+                try:
+                    await context.message.delete()
+                except:
+                    pass
+                try:
+                    m = await context.send(file=obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            elif isinstance(context, discord.Message):
+
+                try:
+                    await context.delete()
+                except:
+                    pass
+                try:
+                    m = await context.channel.send(file=obj)
+                except:
+                    return
+                await asyncio.sleep(seconds)
+                try:
+                    await m.delete()
+                except:
+                    return
+
+            else:
+                raise AttributeError("Context ist nicht: [commands.Context, discord.Message]")
+
+        else:
+            raise AttributeError("Objekt ist nicht: [discord.Embed, discord.File, str]")
+
 
     @staticmethod
-    async def Embed_edit(m, embed, seconds=None):
+    async def Universal_edit(message_obj, obj: [discord.Embed, discord.File, str], seconds: float = 8):
 
-        seconds_ = seconds if seconds is not None else 10
+        # Embed Check
+        if isinstance(obj, discord.Embed):
 
-        try:
-            await m.edit(embed=embed)
             try:
-                await m.clear_reactions()
+                await message_obj.edit(embed=obj)
+            except:
+                return
+            try:
+                await message_obj.clear_reactions()
             except:
                 pass
-            await asyncio.sleep(seconds_)
-            await m.delete()
-        except:
-            pass
+            await asyncio.sleep(seconds)
+            try:
+                await message_obj.delete()
+            except:
+                return
+
+        # Datei Check
+        elif isinstance(obj, discord.File):
+
+            try:
+                await message_obj.edit(file=obj)
+            except:
+                return
+            try:
+                await message_obj.clear_reactions()
+            except:
+                pass
+            await asyncio.sleep(seconds)
+            try:
+                await message_obj.delete()
+            except:
+                return
+
+        # Nachricht Check
+        elif isinstance(obj, str):
+
+            try:
+                await message_obj.edit(obj)
+            except:
+                return
+            try:
+                await message_obj.clear_reactions()
+            except:
+                pass
+            await asyncio.sleep(seconds)
+            try:
+                await message_obj.delete()
+            except:
+                return
+
+        else:
+
+            raise AttributeError(f"Objekt ist nicht: [discord.Embed, discord.File, str] => {type(obj)}")
+
 
     @staticmethod
-    async def s_file(ctx, file, seconds=None):
-
-        seconds_ = seconds if seconds is not None else 10
-
-        try:
-            await ctx.message.delete()
-        except:
-            pass
-        m = await ctx.send(file=file)
-        await asyncio.sleep(seconds_)
-        try:
-            await m.delete()
-        except:
-            pass
-
-    @staticmethod
-    async def sm_ctx(ctx, message, seconds=None):
-
-        seconds_ = seconds if seconds is not None else 10
-
-        try:
-            await ctx.message.delete()
-        except:
-            pass
-            m = await ctx.send(message)
-            await asyncio.sleep(seconds_)
-        try:
-            await m.delete()
-        except:
-            pass
-
-    @staticmethod
-    async def sm_message(message, message_content, seconds=None):
-
-        seconds_ = seconds if seconds is not None else 10
-
-        try:
-            await message.delete()
-        except:
-            pass
-            m = await message.channel.send(message_content)
-            await asyncio.sleep(seconds_)
-        try:
-            await m.delete()
-        except:
-            pass
-
-
-class Pagination:
-    def __init__(self, client):
-        self.client = client
-
-    async def Pag(self, ctx, content, info = None):
+    async def Paginator(self, ctx, content: list, info: str = None):
 
         contents = content
 
@@ -201,6 +286,7 @@ class Pagination:
             await ctx.message.delete()
         except:
             pass
+
         message = await ctx.send(embed=contents[cur_page])
 
         await message.add_reaction("⏪")
@@ -280,6 +366,52 @@ class Pagination:
                 break
 
 
+class Permissions:
+
+    @staticmethod
+    def Ban_perm():
+        async def peridicate1(ctx):
+            return ctx.author.guild_permissions.ban_members
+
+        return commands.check(peridicate1)
+
+    @staticmethod
+    def Clear_perm():
+        async def peridicate4(ctx):
+            return ctx.author.guild_permissions.manage_messages
+
+        return commands.check(peridicate4)
+
+    @staticmethod
+    def Lock_Unlock_perm():
+        async def peridicate3(ctx):
+            return ctx.author.guild_permissions.manage_channels \
+                   and ctx.author.guild_permissions.manage_guild
+
+        return commands.check(peridicate3)
+
+    @staticmethod
+    def Kick_perm():
+        async def peridicate2(ctx):
+            return ctx.author.guild_permissions.kick_members
+
+        return commands.check(peridicate2)
+
+
+# GET_CHANNEL
+
+
+async def get_channel(user, embed, name):
+    channel = discord.utils.get(user.guild.text_channels, name=name)
+
+    if channel is None:
+        return
+
+    else:
+
+        await channel.send(embed=embed)
+        return
+
 
 class Farbe:
 
@@ -300,3 +432,5 @@ class Farbe:
     Orange = 0xfd9644
 
     Darker_Theme = 0x23272a
+
+    ShimariRosa = 0xff00ff

@@ -1,0 +1,27 @@
+Update_Stats:
+  1: [0, 0]
+  2: [10, 0]
+  3: [10, 10]
+  4: [30, 30]
+
+Bonus_Stats:
+  Resistance: -10
+  1: 0
+  2: 10
+  3: 20
+
+Random_Rarity:
+  Max_Chance: 15
+  Control: 13
+
+Random_Energie:
+  Start: 50
+  End: 100
+  Bonus: [ 10, 25, 35, 65 ]
+
+Failure_Rate:
+  Chance: 15
+  Buttons: 19
+
+Shop:
+  Preis: [50, 100, 150, 500]

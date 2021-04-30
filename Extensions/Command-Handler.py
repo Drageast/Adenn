@@ -1,12 +1,12 @@
 # Import
-import asyncio
-import datetime
 import traceback
 from datetime import datetime
 import aiohttp
 import discord
 from discord import Webhook, AsyncWebhookAdapter
 from discord.ext import commands
+import psutil
+
 
 # Utils
 import Utils
@@ -23,6 +23,7 @@ class HANDLER(commands.Cog):
     # ERROR_HANDLER
 
     @commands.Cog.listener()
+    @Utils.Wrappers.TimeLogger
     async def on_command_error(self, ctx, error):
 
         if isinstance(error, commands.DisabledCommand):
@@ -33,10 +34,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            await ctx.message.delete()
-            m = await ctx.send(embed=embed)
-            await asyncio.sleep(15)
-            await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.NoPrivateMessage):
 
@@ -47,18 +45,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.BadArgument or commands.ArgumentParsingError or commands.BadBoolArgument):
             embed = discord.Embed(
@@ -68,18 +55,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.MissingRequiredArgument or commands.TooManyArguments):
             embed = discord.Embed(
@@ -89,18 +65,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.MissingPermissions or commands.BotMissingPermissions):
             embed = discord.Embed(
@@ -110,18 +75,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.NotOwner):
             embed = discord.Embed(
@@ -131,18 +85,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.CommandOnCooldown):
 
@@ -153,18 +96,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.CommandNotFound):
             return
@@ -177,18 +109,7 @@ class HANDLER(commands.Cog):
             )
             embed.set_thumbnail(url=self.client.user.avatar_url)
 
-            try:
-
-                await ctx.message.delete()
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
-
-            except discord.HTTPException:
-
-                m = await ctx.send(embed=embed)
-                await asyncio.sleep(15)
-                await m.delete()
+            await Utils.Messaging.Universal_send(ctx, embed, 15)
 
         elif isinstance(error, commands.CommandInvokeError):
 
@@ -202,19 +123,7 @@ class HANDLER(commands.Cog):
                 embed.set_author(name="Credit Bank", icon_url=Utils.YAML.GET("Bilder", "Credits"))
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                try:
-
-                    await ctx.message.delete()
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-
-                except discord.HTTPException:
-
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-                return
+                await Utils.Messaging.Universal_send(ctx, embed, 15)
 
             elif isinstance(error.original, Utils.MusicError):
 
@@ -225,19 +134,7 @@ class HANDLER(commands.Cog):
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                try:
-
-                    await ctx.message.delete()
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-
-                except discord.HTTPException:
-
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-                return
+                await Utils.Messaging.Universal_send(ctx, embed, 15)
 
             if isinstance(error.original, Utils.UccountError):
 
@@ -248,90 +145,148 @@ class HANDLER(commands.Cog):
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                try:
-
-                    await ctx.message.delete()
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-
-                except discord.HTTPException:
-
-                    m = await ctx.send(embed=embed)
-                    await asyncio.sleep(15)
-                    await m.delete()
-                return
+                await Utils.Messaging.Universal_send(ctx, embed, 15)
 
             else:
 
                 embed = discord.Embed(
                     title='ACHTUNG!',
                     colour=discord.Colour(Utils.Farbe.Red),
-                    description='Der Command ist **korrumpiert**!\nTritt dieser Fehler erneut auf, '
+                    description='In diesem Command ist ein schwerwiegender Fehler aufgetreten!\nIch habe die Fehlermeldung and das Developement Team weitergeleitet.'
+                                'Tritt dieser Fehler in den nächsten Tagen erneut auf, '
                                 'kontaktiere **dringend** den Support: **!s**'
                 )
-                embed.add_field(name='**LOG:**', value=f'```css\n[{error}]\n```')
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
                 async with aiohttp.ClientSession() as session:
-                    url = "https://discordapp.com/api/webhooks/815708355371860069/gy3_edx9paMdTg6f-0WL2qOlWnGKalV_10SPwK3jjdWV3f4dPSbvLStyDmClkAVQBRgu"
+                    url = Utils.YAML.GET("Variables", "ClientSide", "Webhooks", "System")
 
                     webhook = Webhook.from_url(url, adapter=AsyncWebhookAdapter(session))
 
-                    timestamp = datetime.utcnow()
+
                     trace = traceback.format_exception(None, error, error.__traceback__)
-                    b = 0
+                    if '\nThe above exception was the direct cause of the following exception:\n\n' in trace:
+                        trace = trace[:trace.index('\nThe above exception was the direct cause of the following exception:\n\n')]
+                        traceback_text = "\n".join(trace)
+                    else:
+                        traceback_text = trace
+
+                    y = 0
+                    for obj in traceback_text:
+                        y += len(obj)
+
+                    while y >= 2045:
+                        traceback_text = traceback_text[:1]
+                        y = 0
+                        for obj in traceback_text:
+                            y += len(obj)
+
+                    try:
+                        Server = ctx.guild.name
+                    except:
+                        Server = None
+                    try:
+                        Channel = ctx.channel.name
+                    except:
+                        Channel = None
 
                     erembed = discord.Embed(
-                        title="\u200b\nEin schwerwiegender Fehler ist aufgetreten!\n\u200b",
-                        colour=discord.Colour(Utils.Farbe.Red)
+                        title="\u200b\nEin Fehler ist aufgetreten!\n\u200b",
+                        colour=discord.Colour(Utils.Farbe.Red),
+                        description=f"**Ausgeführt von:**\n`{ctx.author} | {ctx.author.id}`\n\n"
+                                    f"**Command Information:**\n"
+                                    f"Executed on Server: `{Server}`\n"
+                                    f"Executed in Channel: `{Channel}`\n"
+                                    f"Cog: `{ctx.cog}`\n"
+                                    f"Command: `{self.client.command_prefix}{ctx.command.name} {ctx.command.signature}`\n"
+                                    f"_Executed:_ `{ctx.message.content}`\n\n"
+                                    f"**Error:**\n"
+                                    f"`{error}`\n\n"
+                                    f"**Analytics:**\n"
+                                    f"CPU: `{psutil.cpu_percent(interval=1, percpu=True)}`\n"
+                                    f"RAM: `{psutil.virtual_memory().percent}`\n\n"
+                                    f"**Traceback:**```py\n{str(traceback_text)}\n```",
+                        timestamp=datetime.utcnow()
                     )
-                    erembed.set_author(name=f"{timestamp.strftime(r'%I:%M %p')}",
-                                       icon_url=Utils.YAML.GET("Bilder", "Clock"))
-                    erembed.add_field(name='**OPERATOR:**', value=f'```fix\n[{ctx.author} / {ctx.author.id}]\n```',
-                                      inline=False)
-                    try:
-                        erembed.add_field(name='**SERVER:**', value=f'```fix\n[{ctx.guild.name}]\n```', inline=False)
-                        erembed.add_field(name='**KANAL:**', value=f'```fix\n[{ctx.channel.name}]\n```', inline=False)
-                    except AttributeError:
-                        pass
-                    erembed.add_field(name='**COMMAND:**',
-                                      value=f'```fix\n[{self.client.command_prefix}{ctx.command.qualified_name}]\n```',
-                                      inline=False)
-                    erembed.add_field(name='**NACHRICHT:**', value=f'```fix\n[{ctx.message.content}]\n```',
-                                      inline=False)
-                    erembed.add_field(name='**ERROR:**', value=f'```css\n[{error}]\n```\n\n\u200b', inline=False)
-                    erembed.add_field(name='**TRACEBACK:**', value=f'\u200b', inline=False)
-                    erembed.set_thumbnail(url=self.client.user.avatar_url)
-                    for _ in trace:
-                        erembed.add_field(name='\u200b', value=f'```python\n{trace[b]}\n```', inline=False)
-                        b += 1
+                    embed.set_footer(text='\u200b', icon_url=Utils.YAML.GET("Bilder", "Clock"))
 
-                    await webhook.send(username="Ein korrumpierter Command wurde ausgelöst!",
-                                       avatar_url=self.client.user.avatar_url, embed=erembed)
 
-                    try:
+                    await webhook.send(username="System Benachrichtigung", avatar_url=self.client.user.avatar_url, embed=erembed)
 
-                        await ctx.message.delete()
-                        m = await ctx.send(embed=embed)
-                        await asyncio.sleep(15)
-                        await m.delete()
+                    await Utils.Messaging.Universal_send(ctx, embed, 15)
 
-                    except discord.HTTPException:
+        else:
 
-                        m = await ctx.send(embed=embed)
-                        await asyncio.sleep(15)
-                        await m.delete()
+            embed = discord.Embed(
+                title='ACHTUNG!',
+                colour=discord.Colour(Utils.Farbe.Red),
+                description='In diesem Command ist ein schwerwiegender Fehler aufgetreten!\nIch habe die Fehlermeldung and das Developement Team weitergeleitet.'
+                            'Tritt dieser Fehler in den nächsten Tagen erneut auf, '
+                            'kontaktiere **dringend** den Support: **!s**'
+            )
+            embed.set_thumbnail(url=self.client.user.avatar_url)
+
+            async with aiohttp.ClientSession() as session:
+                url = Utils.YAML.GET("Variables", "ClientSide", "Webhooks", "System")
+
+                webhook = Webhook.from_url(url, adapter=AsyncWebhookAdapter(session))
+
+                trace = traceback.format_exception(None, error, error.__traceback__)
+                if '\nThe above exception was the direct cause of the following exception:\n\n' in trace:
+                    trace = trace[
+                            :trace.index('\nThe above exception was the direct cause of the following exception:\n\n')]
+                    traceback_text = "\n".join(trace)
+                else:
+                    traceback_text = trace
+
+                y = 0
+                for obj in traceback_text:
+                    y += len(obj)
+
+
+                while y >= 2045:
+                    traceback_text = traceback_text[:1]
+                    y = 0
+                    for obj in traceback_text:
+                        y += len(obj)
+
+                try:
+                    Server = ctx.guild.name
+                except:
+                    Server = None
+                try:
+                    Channel = ctx.channel.name
+                except:
+                    Channel = None
+
+                erembed = discord.Embed(
+                    title="\u200b\nEin Fehler ist aufgetreten!\n\u200b",
+                    colour=discord.Colour(Utils.Farbe.Red),
+                    description=f"**Ausgeführt von:**\n`{ctx.author} | {ctx.author.id}`\n\n"
+                                f"**Command Information:**\n"
+                                f"Executed on Server: `{Server}`\n"
+                                f"Executed in Channel: `{Channel}`\n"
+                                f"Cog: `{ctx.cog}`\n"
+                                f"Command: `{self.client.command_prefix}{ctx.command.name} {ctx.command.signature}`\n"
+                                f"_Executed:_ `{ctx.message.content}`\n\n"
+                                f"**Error:**\n"
+                                f"`{error}`\n\n"
+                                f"**Analytics:**\n"
+                                f"CPU: `{psutil.cpu_percent(interval=1, percpu=True)}`\n"
+                                f"RAM: `{psutil.virtual_memory().percent}`\n\n"
+                                f"**Traceback:**```py\n{str(traceback_text)}\n```",
+                    timestamp=datetime.utcnow()
+                )
+                embed.set_footer(text='\u200b', icon_url=Utils.YAML.GET("Bilder", "Clock"))
+
+                await webhook.send(username="System Benachrichtigung", avatar_url=self.client.user.avatar_url,
+                                   embed=erembed)
+
+                await Utils.Messaging.Universal_send(ctx, embed, 15)
+
 
     # COMMAND_HANDLER
 
-    @staticmethod
-    def check_command(self, command_name):
-        command = self.client.get_command(command_name)
-
-        choice = '```json\n"AKTIV"\n```' if command.enabled else '```fix\n"INAKTIV"\n```'
-
-        return choice
 
     @commands.command(aliases=["ds"])
     @commands.is_owner()

@@ -1,0 +1,144 @@
+SONSTIGES:
+  # VORLAGE
+
+  0001: # ID
+    Name: "" # Name des Shimaris
+    Motto: "" # Motto des Shimaris # ä = 1, ö = 2, ü = 3
+    Avatar: ["https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg"]
+    KDTN:
+      Energie: 0 # Angriffe Kosten energie je nach schaden
+      Schaden: [] # Schaden in HP je nach Angriffsstufe -- [1 - Stufe des Angriffs, 80 - Schaden in HP]
+      Kosten: [] # Angriffsskosten pro Stufe -- [1 - Stufe des Angriffs, 10 - Kosten der Energie]
+      Leben: 0 # HP
+      Element: [ "", "" ] # Element[0] Resistenz[1] -- Resitenz um 10 Schadenspunkte
+      Seltenheit: 0 # 1 -Normal, 2 - Selten, 3 - Legendär, 4 - Exotisch
+        # Zeigt die Höchst-Mögliche Seltenheit
+      # BasisEnergie + 10, Leben + 100, Resistenz + 5
+      # KEINEN EFFEKT AUF NORMAL!
+
+
+# ------------------------------------------------------------
+
+Control: [6520, 2306, 3015, 7747, 4448, 9463, 5210, 8673, 7596]
+
+ID:
+
+  STARTER:
+    Name: "Tabia"
+    Motto: "Ich bin der Perfekte Starter!"
+    Avatar: [ "https://i.imgur.com/L1MFNxJ.jpg" ]
+    KDTN:
+      Energie: 287
+      Schaden: [ 43, 90, 227 ]
+      Kosten: [ 41, 106, 215 ]
+      Leben: 685
+      Element: [ "Lux", "Psio" ]
+      Seltenheit: 1
+
+  6520:
+    Name: "Umakii"
+    Motto: "Nichts und niemand ist so stark wie ich!"
+    Avatar: [ "https://i.imgur.com/haKwfJr.jpg", "https://i.imgur.com/JLgX8mM.jpg", "https://i.imgur.com/nGuVDX2.jpg" ]
+    KDTN:
+      Energie: 306
+      Schaden: [ 46, 97, 161 ]
+      Kosten: [ 69, 146, 266 ]
+      Leben: 749
+      Element: [ "Psio", "Eros" ]
+      Seltenheit: 3
+
+  2306:
+    Name: "Fuyukurai"
+    Motto: "Ich bin DER Engel unter den Engeln"
+    Avatar: [ "https://i.imgur.com/djyDXb5.jpg", "https://i.imgur.com/dTRWOI5.jpg", "https://i.imgur.com/EFT7HEN.jpg" ]
+    KDTN:
+      Energie: 329
+      Schaden: [ 49, 103, 293 ]
+      Kosten: [ 52, 139, 246 ]
+      Leben: 562
+      Element: [ "Lux", "Psio" ]
+      Seltenheit: 3
+
+  3015:
+    Name: "Nohisa"
+    Motto: "Ich bin der Teufel unter den Engeln..."
+    Avatar: [ "https://i.imgur.com/SFJdPD7.jpg", "https://i.imgur.com/ODr9WGj.jpg", "https://i.imgur.com/t2vS6V8.jpg" ]
+    KDTN:
+      Energie: 252
+      Schaden: [ 37, 78, 130 ]
+      Kosten: [ 76, 130, 228 ]
+      Leben: 957
+      Element: [ "Eros", "Lux" ]
+      Seltenheit: 3
+
+  7747:
+    Name: "Irinari"
+    Motto: "Ich bin der K2nig der L3fte!"
+    Avatar: [ "https://i.imgur.com/gSeDqN5.jpg", "https://i.imgur.com/MvOsaeK.jpg", "https://i.imgur.com/2kNmdeZ.jpg", "https://i.imgur.com/J1RPV4C.jpg" ]
+    KDTN:
+      Energie: 282
+      Schaden: [ 41, 86, 144 ]
+      Kosten: [ 75, 144, 249 ]
+      Leben: 883
+      Element: [ "Lux", "Elec" ]
+      Seltenheit: 4
+
+  4448:
+    Name: "Izuwagi"
+    Motto: "Over 9000!!!"
+    Avatar: [ "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg" ]
+    KDTN:
+      Energie: 173
+      Schaden: [ 26, 55, 178 ]
+      Kosten: [ 18, 59, 115 ]
+      Leben: 1233
+      Element: [ "Lux", "Elec" ]
+      Seltenheit: 4
+
+  9463:
+    Name: "Sakaii"
+    Motto: "Gift ist alles und nichts..."
+    Avatar: [ "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg" ]
+    KDTN:
+      Energie: 250
+      Schaden: [ 37, 78, 130 ]
+      Kosten: [ 56, 117, 214 ]
+      Leben: 928
+      Element: [ "Eros", "Psio" ]
+      Seltenheit: 4
+
+  5210:
+    Name: "Kubo Chy"
+    Motto: "Bin ich ein Geist? Oder nicht?"
+    Avatar: [ "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg" ]
+    KDTN:
+      Energie: 259
+      Schaden: [ 39, 82, 202 ]
+      Kosten: [ 29, 101, 185 ]
+      Leben: 785
+      Element: [ "Lux", "Elec" ]
+      Seltenheit: 4
+
+  8673:
+    Name: "Obi Kaede"
+    Motto: "Die Energie ist mit mir und ich bin mit der Energie..."
+    Avatar: [ "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg" ]
+    KDTN:
+      Energie: 206
+      Schaden: [ 31, 65, 108 ]
+      Kosten: [ 46, 98, 178 ]
+      Leben: 1117
+      Element: [ "Lux", "Elec" ]
+      Seltenheit: 4
+
+  7596:
+    Name: "Aarinu"
+    Motto: "Essen hat auch Gef3hle!"
+    Avatar: [ "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg", "https://i.imgur.com/quQWMYr.jpg" ]
+    KDTN:
+      Energie: 240
+      Schaden: [ 36, 76, 126 ]
+      Kosten: [ 65, 131, 221 ]
+      Leben: 994
+      Element: [ "Psio", "Elec" ]
+      Seltenheit: 3

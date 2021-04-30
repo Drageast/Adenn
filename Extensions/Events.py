@@ -2,9 +2,9 @@
 import asyncio
 import datetime
 import random
-
 import discord
 from discord.ext import commands
+
 
 # Utils
 import Utils
@@ -21,6 +21,7 @@ class EVENT(commands.Cog):
     # MEMBER JOIN
 
     @commands.Cog.listener()
+    @Utils.Wrappers.TimeLogger
     async def on_member_join(self, user: discord.Member):
 
         embed = discord.Embed(
@@ -36,6 +37,7 @@ class EVENT(commands.Cog):
     # MEMBER REMOVE
 
     @commands.Cog.listener()
+    @Utils.Wrappers.TimeLogger
     async def on_member_remove(self, user: discord.Member):
 
         embed = discord.Embed(
@@ -60,6 +62,7 @@ class EVENT(commands.Cog):
     # CLIENT JOIN
 
     @commands.Cog.listener()
+    @Utils.Wrappers.TimeLogger
     async def on_guild_join(self, guild):
 
         embed = discord.Embed(
@@ -78,6 +81,7 @@ class EVENT(commands.Cog):
 
 
     @commands.Cog.listener()
+    @Utils.Wrappers.TimeLogger
     async def on_message(self, message):
 
         if not message.guild:
@@ -107,11 +111,11 @@ class EVENT(commands.Cog):
 
             epoch = datetime.datetime.utcfromtimestamp(0)
 
-            xp_, Timediff = await Utils.Uccounts.check_Uccount(self, message, message.author.id, 2)
+            data = await Utils.Uccounts.check_Uccount(self, message, message.author.id, 2)
 
-            if Timediff >= random.randint(1, 120):
+            if data.diff >= random.randint(1, 120):
 
-                xp = xp_ + 5
+                xp = data.xp + 5
 
                 await Utils.Uccounts.update_Uccount(self, message, message.author.id, "Leveling", "Xp", xp)
                 await Utils.Uccounts.update_Uccount(self, message, message.author.id, "Leveling", "Timestamp", (datetime.datetime.utcnow() - epoch).total_seconds())

@@ -7,8 +7,10 @@ async-timeout
 pyyaml
 pymongo
 aiohttp
-
+psutil
+pillow
+colorthief
 # Discord
-discord~=1.0.1
+discord
 discord.py
 DiscordUtils

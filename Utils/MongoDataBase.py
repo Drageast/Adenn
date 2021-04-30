@@ -1,6 +1,5 @@
 # Import
 import datetime
-import time
 from datetime import date
 from .ErrorHandler import UccountError
 from .Utilities import Wrappers
@@ -39,7 +38,7 @@ class Uccounts:
 
     @staticmethod
     @Wrappers.TimeLogger
-    async def check_Uccount(self, ctx, Uid_, Index: int = None):
+    async def check_Uccount(self, ctx, Uid_, Index: float = None):
 
         epoch = datetime.datetime.utcfromtimestamp(0)
 
@@ -62,7 +61,6 @@ class Uccounts:
             data_.diff = int((datetime.datetime.utcnow() - epoch).total_seconds() - int(data["Timestamp"]))
             data_.lock = data["Lock"]
             data_.bal = data["Balance"]
-            data_.role = data["Specified_Role"]
 
             return data_
 
@@ -99,18 +97,27 @@ class Uccounts:
 
             return data_
 
-        elif Index == 4:
+        elif Index == 4 or Index == 4.5:
 
             if Uccount is None:
                 await Uccounts.create_Uccount(self, ctx, Uid_)
 
             data = self.client.Uccount.find_one({"_id": Uid})
-
-            data = data["ShimariBASE"]
+            data = data["Shimari"]
 
             data_ = Object()
 
-            data_.ShimariList = data["List"]
+            new_List = []
+
+            for obj in data["List"]:
+                New_tuple = (obj[0], obj[1])
+                new_List.append(New_tuple)
+
+            if not new_List and Index != 4.5:
+                x = ("STARTER", 1)
+                new_List.append(x)
+
+            data_.ShimariList = new_List
 
             return data_
 
@@ -144,7 +151,6 @@ class Uccounts:
                     "Casino": {
                         "Timestamp": (datetime.datetime.utcnow() - epoch).total_seconds(),
                         "Lock": False,
-                        "Specified_Role": False,
                         "Balance": 5000
                     },
                     "Leveling": {
@@ -208,11 +214,11 @@ class Uccounts:
 
     @staticmethod
     @Wrappers.TimeLogger
-    async def update_Shimaris(self, ctx, Uid_, Shimari: tuple, Operator: str):
+    async def update_Shimari(self, ctx, Uid_, Shimari: tuple, Operator: str):
 
         if Operator == "+":
 
-            data = await Uccounts.check_Uccount(self, ctx, Uid_, 4)
+            data = await Uccounts.check_Uccount(self, ctx, Uid_, 4.5)
             new_List = data.ShimariList
 
             if Shimari in new_List:
@@ -232,8 +238,6 @@ class Uccounts:
             data = await Uccounts.check_Uccount(self, ctx, Uid_, 4)
             new_List = data.ShimariList
             index = new_List.index(Shimari)
-
-            print(f"Das Shimari {Shimari} ist an Stelle {index}")
             del new_List[index]
 
 

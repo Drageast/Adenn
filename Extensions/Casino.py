@@ -34,6 +34,7 @@ class CASINO(commands.Cog):
             return False, rnum, rcolor
 
     @commands.command(aliases=["rou"])
+    @Utils.Wrappers.TimeLogger
     async def roulette(self, ctx, cred: int):
 
         # CHECK
@@ -47,8 +48,6 @@ class CASINO(commands.Cog):
         ungerade = "✖️"
 
         data = await Utils.Uccounts.check_Uccount(self, ctx, ctx.author.id, 1)
-        print(data.bal, data.lock, data.diff)
-        print(cred)
 
         if data.lock is True:
 
@@ -148,7 +147,7 @@ class CASINO(commands.Cog):
 
             await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
 
-            await Utils.SMOOTH.Embed_edit(m1, embed, 15)
+            await Utils.Messaging.Universal_edit(m1, embed, 15)
 
         else:
 
@@ -161,11 +160,12 @@ class CASINO(commands.Cog):
 
             await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
 
-            await Utils.SMOOTH.Embed_edit(m1, embed, 15)
+            await Utils.Messaging.Universal_edit(m1, embed, 15)
 
 
     @commands.command(aliases=['bj'])
     @commands.cooldown(1, 10, commands.BucketType.user)
+    @Utils.Wrappers.TimeLogger
     async def bj_game(self, ctx, cred: int):
 
         hit = '⬇'
@@ -178,28 +178,25 @@ class CASINO(commands.Cog):
 
         valid_reactions = ['⬇', '⏹']
 
-        chars = ["'", ","]
-
         myDeck = Utils.BlackJack_Bot.Deck()
         hands = Utils.BlackJack_Bot.createPlayinghands(myDeck)
         dealer = hands[0]
         player = hands[1]
 
-        dealerCount = Utils.BlackJack_Bot.pointCount(dealer)
         Utils.BlackJack_Bot.pointCount(player)
 
         new_bal = cred * 2
 
         chars = ["'", ","]
 
-        bal, ban, spec_role, Timediff = await Utils.Uccounts.check_Uccount(self, ctx, ctx.author.id, 1)
+        data = await Utils.Uccounts.check_Uccount(self, ctx, ctx.author.id, 1)
 
-        if ban is True:
+        if data.lock is True:
 
             raise Utils.CreditError("Dein Konto wurde von einem Administrator gesperrt!")
 
 
-        elif cred not in range(100, 20000) or cred > (int(bal) - 100):
+        elif cred not in range(100, 20000) or cred > (int(data.bal) - 100):
 
             raise Utils.CreditError(
                 "Du willst mehr Credits ausgeben als du hast / Mehr setzten als erlaubt ist / Weniger als die Mindestangabe verwenden! (Du musst mind. 100 Credits in der Bank lassen und nicht mehr als 20000 / weniger als 250 setzten.)")
@@ -223,7 +220,7 @@ class CASINO(commands.Cog):
 
                     await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
 
-                    await Utils.SMOOTH.Embed_ctx(ctx, embed, 10)
+                    await Utils.Messaging.Universal_send(ctx, embed, 10)
 
                     return
 
@@ -239,7 +236,7 @@ class CASINO(commands.Cog):
                     embed.add_field(name='**Dealer Hand:**',
                                     value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(Utils.BlackJack_Bot.pointCount(dealer))}')
 
-                    await Utils.SMOOTH.Embed_ctx(ctx, embed, 10)
+                    await Utils.Messaging.Universal_send(ctx, embed, 10)
                     await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
                     return
 
@@ -256,7 +253,7 @@ class CASINO(commands.Cog):
                     embed.set_thumbnail(url=self.client.user.avatar_url)
 
                     await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
-                    await Utils.SMOOTH.Embed_ctx(ctx, embed, 10)
+                    await Utils.Messaging.Universal_send(ctx, embed, 10)
                     return
 
                 elif Utils.BlackJack_Bot.pointCount(player) > 21 > Utils.BlackJack_Bot.pointCount(dealer):
@@ -272,7 +269,7 @@ class CASINO(commands.Cog):
                     embed.set_thumbnail(url=self.client.user.avatar_url)
 
                     await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
-                    await Utils.SMOOTH.Embed_ctx(ctx, embed, 10)
+                    await Utils.Messaging.Universal_send(ctx, embed, 10)
                     return
 
                 elif Utils.BlackJack_Bot.pointCount(dealer) > 21 > Utils.BlackJack_Bot.pointCount(player):
@@ -288,7 +285,7 @@ class CASINO(commands.Cog):
                     embed.set_thumbnail(url=ctx.author.avatar_url)
 
                     await Utils.Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
-                    await Utils.SMOOTH.Embed_ctx(ctx, embed, 10)
+                    await Utils.Messaging.Universal_send(ctx, embed, 10)
                     return
 
                 else:
@@ -360,6 +357,7 @@ class CASINO(commands.Cog):
                         return
 
     @commands.command(aliases=["bjd"])
+    @Utils.Wrappers.TimeLogger
     async def blackjack_d(self, ctx, user: discord.Member):
 
         myDeck = Utils.BlackJack_Duell.Deck()
@@ -441,10 +439,7 @@ class CASINO(commands.Cog):
                     colour=discord.Colour(Utils.Farbe.Red),
                     description=f'{ctx.author.mention} hat nicht rechtzeitig reagiert.'
                 )
-                await st.clear_reactions()
-                await st.edit(embed=erembed)
-                await asyncio.sleep(9)
-                await st.delete()
+                await Utils.Messaging.Universal_edit(ctx, erembed, 15)
                 return
             try:
                 reaction2, user2 = await self.client.wait_for('reaction_add', timeout=120.0, check=check2)
@@ -456,10 +451,7 @@ class CASINO(commands.Cog):
                     colour=discord.Colour(Utils.Farbe.Red),
                     description=f'{user.mention} hat nicht rechtzeitig reagiert.'
                 )
-                await st.clear_reactions()
-                await st.edit(embed=erembed)
-                await asyncio.sleep(9)
-                await st.delete()
+                await Utils.Messaging.Universal_edit(ctx, erembed, 15)
                 return
 
             if not str(reaction1.emoji) == str(reaction2.emoji):
@@ -471,8 +463,7 @@ class CASINO(commands.Cog):
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await st.clear_reactions()
-                return await Utils.SMOOTH.Embed_edit(st, embed, 15)
+                return await Utils.Messaging.Universal_edit(st, embed, 15)
 
             else:
 
@@ -649,6 +640,7 @@ class CASINO(commands.Cog):
                     return
 
     @commands.command()
+    @Utils.Wrappers.TimeLogger
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def slot(self, ctx):
 
@@ -706,7 +698,7 @@ class CASINO(commands.Cog):
             m = await ctx.send(embed=embed)
             await asyncio.sleep(1)
 
-            for x in Wheel1Co:
+            for _ in Wheel1Co:
                 embed = discord.Embed(
                     title="-SLOT-MASCHINE-",
                     colour=discord.Colour(Utils.Farbe.Red),
@@ -720,7 +712,7 @@ class CASINO(commands.Cog):
 
             await asyncio.sleep(0.5)
 
-            for x in Wheel2Co:
+            for _ in Wheel2Co:
                 embed = discord.Embed(
                     title="-SLOT-MASCHINE-",
                     colour=discord.Colour(Utils.Farbe.Red),
@@ -734,7 +726,7 @@ class CASINO(commands.Cog):
 
             await asyncio.sleep(0.5)
 
-            for x in Wheel3Co:
+            for _ in Wheel3Co:
                 embed = discord.Embed(
                     title="-SLOT-MASCHINE-",
                     colour=discord.Colour(Utils.Farbe.Red),
@@ -748,10 +740,9 @@ class CASINO(commands.Cog):
 
             await asyncio.sleep(1)
 
-            new_embed = await Utils.Win_evaluation.SlotMachine.win_evaluation_slot(self, ctx, Wheel1Co[-1:],
-                                                                                   Wheel2Co[-1:], Wheel3Co[-1:], m)
+            new_embed = await Utils.Win_evaluation.SlotMachine.win_evaluation_slot(self, ctx, Wheel1Co[-1:], Wheel2Co[-1:], Wheel3Co[-1:], m)
 
-            await Utils.SMOOTH.Embed_edit(m, new_embed, 10)
+            await Utils.Messaging.Universal_edit(m, new_embed, 15)
 
 
 # Cog Finishing
