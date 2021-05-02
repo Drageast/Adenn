@@ -56,7 +56,7 @@ class YAML:
                 UnPacked.Name = raw_Shimari["Name"]
                 UnPacked.Motto = raw_Shimari["Motto"]
                 UnPacked.Avatar = raw_Shimari["Avatar"]
-                UnPacked.Energie = raw_Shimari["KDTN"]["Energie"]
+                UnPacked.Mana = raw_Shimari["KDTN"]["Mana"]
                 UnPacked.Kosten = raw_Shimari["KDTN"]["Kosten"]
                 UnPacked.Leben = raw_Shimari["KDTN"]["Leben"]
                 UnPacked.Schaden = raw_Shimari["KDTN"]["Schaden"]
@@ -84,7 +84,7 @@ class ShimariBASE:
         self.Name: str = self.Data.Name
         self.Motto: str = self.Data.Motto
         self.Avatar: str = self.Data.Avatar
-        self.Energie: int = self.Data.Energie
+        self.Mana: int = self.Data.Mana
         self.Cost: list = self.Data.Kosten
         self.Damage: list = self.Data.Schaden
         self.Health: int = self.Data.Leben
@@ -101,7 +101,7 @@ class ShimariBASE:
             self.Motto = self.Motto.replace("3", "ü")
 
     def __str__(self):
-        return f"\n`Name`: _{self.Name}_\n`Motto`:\n_{self.Motto}_\n`Basis Energie`: _{self.Energie}_\n`Angriffskosten`: _{self.Cost}_" \
+        return f"\n`Name`: _{self.Name}_\n`Motto`:\n_{self.Motto}_\n`Mana`: _{self.Mana}_\n`Angriffskosten`: _{self.Cost}_" \
                f"\n`Schaden`: _{self.Damage}_\n`Leben`: _{self.Health}_\n`Element`: _{self.Element}_\n`Resistenz`: _{self.Resistance}_\n`Seltenheit`: **{self.GetRarity()}**\n"
 
     def __setitem__(self, key, value):
@@ -112,7 +112,7 @@ class ShimariBASE:
 
     def debug(self):
         x = [{"Name": self.Name, "Motto": self.Motto},
-             {"KDTN": {"Energie": self.Energie, "Kosten": self.Cost, "Schaden": self.Damage, "Leben": self.Health}},
+             {"KDTN": {"Mana": self.Mana, "Kosten": self.Cost, "Schaden": self.Damage, "Leben": self.Health}},
              {"KDTN": {"Element": self.Element, "Resistenz": self.Resistance}},
              {"KDTN": {"Seltenheit - Integer": self.Rarity, "Seltenheit - String": self.GetRarity()}}]
         return x
@@ -123,11 +123,11 @@ class ShimariBASE:
 
     def fight_data(self, damage=None):
         y = f"\n`Schaden`: {damage}" if damage is not None else ""
-        x = f"`Leben`: {self.Health}\n`Energie`: {self.Energie}{y}"
+        x = f"`Leben`: {self.Health}\n`Mana`: {self.Mana}{y}"
         return x
 
     def post_fight_data(self):
-        return f"`Energie`: {self.Energie}\n`Angriffskosten`: {self.Cost}\n`Angriffsschaden`: {self.Damage}"
+        return f"`Mana`: {self.Mana}\n`Angriffskosten`: {self.Cost}\n`Angriffsschaden`: {self.Damage}"
 
     def price(self):
         base_price = YAML.GET("Shop", "Preis")
@@ -149,7 +149,7 @@ class ShimariBASE:
         if self.Rarity == 1:
             bonus = YAML.GET("Random_Energie", "Bonus")[0]
 
-        self.Energie += int(rnum + bonus)
+        self.Mana += int(rnum + bonus)
 
     @Wrappers.TimeLogger
     def update_Stats(self):
@@ -157,22 +157,22 @@ class ShimariBASE:
         if self.Health == self.Data.Leben:
             if self.Rarity == 1:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 1)[0])))
-                self.Energie = (int(self.Data.Energie + int(YAML.GET("Update_Stats", 1)[1])))
+                self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 1)[1])))
                 print("Stufe 1")
                 return
             elif self.Rarity == 2:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 2)[0])))
-                self.Energie = (int(self.Data.Energie + int(YAML.GET("Update_Stats", 2)[1])))
+                self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 2)[1])))
                 print("Stufe 2")
                 return
             elif self.Rarity == 3:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 3)[0])))
-                self.Energie = (int(self.Data.Energie + int(YAML.GET("Update_Stats", 3)[1])))
+                self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 3)[1])))
                 print("Stufe 3")
                 return
             elif self.Rarity == 4:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 4)[0])))
-                self.Energie = (int(self.Data.Energie + int(YAML.GET("Update_Stats", 4)[1])))
+                self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 4)[1])))
                 print("Stufe 4")
                 return
 
@@ -192,45 +192,31 @@ class Shimari(ShimariBASE):
     @staticmethod
     @Wrappers.TimeLogger
     def fight(Shimari1: ShimariBASE, Shimari2: ShimariBASE, Attack: int):
-        Shimari1.update_Stats()
-        Shimari2.update_Stats()
+        Chance = random.randint(1, 10)
 
-        if int(Shimari2["Health"]) <= 0:
-            return False
+        bonus = YAML.GET("Bonus_Stats", "Resistance") if Shimari1.Element == Shimari2.Resistance else \
+            (YAML.GET("Bonus_Stats", 1) if Attack == 1 else (
+                YAML.GET("Bonus_Stats", 2) if Attack == 2 else YAML.GET("Bonus_Stats", 3)))
 
-        elif int(Shimari1["Energie"]) < 1:
-            return False
+        Health = int(Shimari2["Health"]) - (int(Shimari1["Damage"][Attack - 1]) + int(bonus))
+
+        Energie = int(Shimari1["Mana"]) - int(Shimari1["Cost"][Attack - 1])
+
+        Shimari1["Mana"] = Energie
+
+        if Chance <= int(Shimari2.Rarity):
+            data = Object()
+            data.damage = "Geblockt!"
+
+            return data
 
         else:
 
-            Chance = random.randint(1, 100)
+            Shimari2["Health"] = Health
+            data = Object()
+            data.damage = int(Shimari1["Damage"][Attack - 1]) + int(bonus)
 
-
-            bonus = YAML.GET("Bonus_Stats", "Resistance") if Shimari1.Element == Shimari2.Resistance else \
-                (YAML.GET("Bonus_Stats", 1) if Attack == 1 else (
-                    YAML.GET("Bonus_Stats", 2) if Attack == 2 else YAML.GET("Bonus_Stats", 3)))
-
-            Health = int(Shimari2["Health"]) - (int(Shimari1["Damage"][Attack - 1]) + int(bonus))
-
-            Energie = int(Shimari1["Energie"]) - int(Shimari1["Cost"][Attack - 1])
-
-            if Chance <= YAML.GET("Failure_Rate", "Chance"):
-                Shimari1["Energie"] = Energie
-
-                data = Object()
-                data.damage = "0, Geblockt!"
-
-                return data
-
-            else:
-
-                Shimari2["Health"] = Health
-                Shimari1["Energie"] = Energie
-
-                data = Object()
-                data.damage = int(Shimari1["Damage"][Attack - 1]) + int(bonus)
-
-                return data
+            return data
 
 
 class DiscordShimari:
@@ -256,8 +242,9 @@ class DiscordShimari:
     @Wrappers.TimeLogger
     def list_control(name=None):
         Name = name if name else None
-        if "_" in Name:
-            Name = Name.replace("_", " ")
+        if Name:
+            if "_" in Name:
+                Name = Name.replace("_", " ")
 
         control = YAML.UNPACK("List")
 
@@ -294,13 +281,13 @@ class DiscordShimari:
     def CALCULATE_Attack(Shimari_: ShimariBASE):
         S = Shimari_
 
-        if S.Energie >= (S.Cost[2] * 1.5):
+        if S.Mana >= (S.Cost[2]):
             return 3
 
-        elif S.Energie >= (S.Cost[1] * 1.5):
+        elif S.Mana >= (S.Cost[1] ):
             return 2
 
-        elif S.Energie >= (S.Cost[0] * 1.5):
+        elif S.Mana >= (S.Cost[0]):
             return 1
 
         else:
@@ -311,7 +298,6 @@ class DiscordShimari:
     async def ShimariShop(self, ctx, content: list, shimari_list: list, info: str = None):
 
         contents = content
-        print(shimari_list)
 
         info_ = None
 

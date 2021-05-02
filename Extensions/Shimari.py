@@ -19,7 +19,9 @@ class ShimariCommands(commands.Cog):
         self.Failure = "🔴"
         State = Utils.YAML.GET("Variables", "ClientSide", "Status")
         if State == 1:
-            self.interactive_Shimari.start()
+            self.interactive_Shimari.start(False, False)
+        elif State == 2:
+            self.interactive_Shimari.start(True, True)
 
     # Shimari Group
 
@@ -85,7 +87,7 @@ class ShimariCommands(commands.Cog):
     @Utils.Wrappers.TimeLogger
     async def reboot(self, ctx):
 
-        self.interactive_Shimari.restart()
+        self.interactive_Shimari.restart(True, False)
 
         m = f"**Du hast `self.interactive_Shimari` neugestartet.**"
 
@@ -199,7 +201,7 @@ class ShimariCommands(commands.Cog):
 
         User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(list2.ShimariList[index2])
 
-        while User_Shimari.Health >= 0 or Author_Shimari.Health >= 0 or User_Shimari.Energie >= 0 or Author_Shimari.Energie >= 0:
+        while User_Shimari.Health >= 0 or Author_Shimari.Health >= 0 or User_Shimari.Mana >= 0 or Author_Shimari.Mana >= 0:
 
             embed = discord.Embed(
                 title=":~Shimari~:",
@@ -241,7 +243,7 @@ class ShimariCommands(commands.Cog):
             m = await ctx.send(embed=embed)
             await asyncio.sleep(5)
 
-            if User_Shimari.Health <= 0 or Author_Shimari.Health <= 0 or User_Shimari.Energie <= 0 or Author_Shimari.Energie <= 0:
+            if User_Shimari.Health <= 0 or Author_Shimari.Health <= 0 or User_Shimari.Mana <= 0 or Author_Shimari.Mana <= 0:
                 break
 
             embed = discord.Embed(
@@ -289,7 +291,7 @@ class ShimariCommands(commands.Cog):
             Author_Shimari.random_Energie()
             User_Shimari.random_Energie()
 
-        if User_Shimari.Health <= 0:
+        if User_Shimari.Mana <= 0:
             embed = discord.Embed(
                 title=":~Shimari~:",
                 colour=discord.Colour(Utils.Farbe.ShimariRosa),
@@ -299,7 +301,7 @@ class ShimariCommands(commands.Cog):
             await Utils.Messaging.Universal_edit(m, embed, 15)
             return
 
-        elif User_Shimari.Energie <= 0:
+        elif User_Shimari.Mana <= 0:
             embed = discord.Embed(
                 title=":~Shimari~:",
                 colour=discord.Colour(Utils.Farbe.ShimariRosa),
@@ -319,7 +321,7 @@ class ShimariCommands(commands.Cog):
             await Utils.Messaging.Universal_edit(m, embed, 15)
             return
 
-        elif Author_Shimari.Energie <= 0:
+        elif Author_Shimari.Mana <= 0:
             embed = discord.Embed(
                 title=":~Shimari~:",
                 colour=discord.Colour(Utils.Farbe.ShimariRosa),
@@ -391,7 +393,9 @@ class ShimariCommands(commands.Cog):
 
     @Shi.command()
     async def look(self, ctx, name=None, Debug=None):
-        namee = None if name.lower() == "none" else (None if name is None else name)
+
+        namee = None if name is None else (None if name.lower() == "none" else name)
+
 
         shimari_list = Utils.Shimari.DiscordShimari.list_control(namee)
         embeds = []
@@ -418,7 +422,7 @@ class ShimariCommands(commands.Cog):
 
     @tasks.loop(hours=2)
     @Utils.Wrappers.TimeLogger
-    async def interactive_Shimari(self):
+    async def interactive_Shimari(self, bypass1=False, bypass2=False):
         await asyncio.sleep(10)
         y = 0
         guilds = []
@@ -429,9 +433,13 @@ class ShimariCommands(commands.Cog):
                 elif str(user.status) != "offline":
                     y += 1
 
-            if y >= 8:
+            if y >= 8 or bypass1 is True:
 
                 if random.randint(1, 10) <= 8:
+                    guilds.append(guild)
+                    y = 0
+
+                elif bypass2 is True:
                     guilds.append(guild)
                     y = 0
 
@@ -442,8 +450,12 @@ class ShimariCommands(commands.Cog):
                 y = 0
 
         for guild in guilds:
-            channel = discord.utils.get(guild.text_channels,
-                                        name=Utils.YAML.GET("Variables", "ClientSide", "Channels", "Shimari"))
+
+            if bypass2 is True:
+                channel = discord.utils.get(guild.text_channels, id=Utils.YAML.GET("Variables", "ClientSide", "Channels", "Shimari_TEST"))
+            else:
+                channel = discord.utils.get(guild.text_channels,
+                                            name=Utils.YAML.GET("Variables", "ClientSide", "Channels", "Shimari"))
 
             def check(reaction, user):
                 return str(reaction.emoji) == "❗" and user != user.bot
@@ -536,7 +548,7 @@ class ShimariCommands(commands.Cog):
 
                 User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(list.ShimariList[index1])
 
-                while User_Shimari.Health >= 0 or AI.Health >= 0 or User_Shimari.Energie >= 0 or AI.Energie >= 0:
+                while User_Shimari.Health >= 0 or AI.Health >= 0 or User_Shimari.Mana >= 0 or AI.Mana >= 0:
 
                     embed = discord.Embed(
                         title=":~Shimari~:",
@@ -589,7 +601,7 @@ class ShimariCommands(commands.Cog):
                     m = await channel.send(embed=embed)
                     await asyncio.sleep(5)
 
-                    if User_Shimari.Health <= 0 or AI.Health <= 0 or User_Shimari.Energie <= 0 or AI.Energie <= 0:
+                    if User_Shimari.Health <= 0 or AI.Health <= 0 or User_Shimari.Mana <= 0 or AI.Mana <= 0:
                         break
 
                     attack2 = Utils.Shimari.DiscordShimari.CALCULATE_Attack(AI)
@@ -609,7 +621,7 @@ class ShimariCommands(commands.Cog):
                     m = await channel.send(embed=embed)
                     await asyncio.sleep(5)
 
-                    if User_Shimari.Health <= 0 or AI.Health <= 0 or User_Shimari.Energie <= 0 or AI.Energie <= 0:
+                    if User_Shimari.Health <= 0 or AI.Health <= 0 or User_Shimari.Mana <= 0 or AI.Mana <= 0:
                         break
 
                     AI.random_Energie()
@@ -625,7 +637,7 @@ class ShimariCommands(commands.Cog):
                     await Utils.Messaging.Universal_edit(m, embed, 15)
                     return
 
-                elif User_Shimari.Energie <= 0:
+                elif User_Shimari.Mana <= 0:
                     embed = discord.Embed(
                         title=":~Shimari~:",
                         colour=discord.Colour(Utils.Farbe.ShimariRosa),
@@ -647,7 +659,7 @@ class ShimariCommands(commands.Cog):
                     await Utils.Messaging.Universal_edit(m, embed, 15)
                     return
 
-                elif AI.Energie <= 0:
+                elif AI.Mana <= 0:
                     embed = discord.Embed(
                         title=":~Shimari~:",
                         colour=discord.Colour(Utils.Farbe.ShimariRosa),

@@ -26,8 +26,9 @@ async def on_ready():
 
     State = Utils.YAML.GET("Variables", "ClientSide", "Status")
     choice = "ONLINE" if State == 1 else "WARTUNG"
-    choicemessage = "Das ist der Weg!" if State == 1 else "-Wartungsarbeiten-"
+    choicemessage = "Das ist der Weg!" if State == 1 else "Maintenance Mode"
     choicestatus = discord.Status.online if State == 1 else discord.Status.do_not_disturb
+    client.State = State
 
     await client.change_presence(status=choicestatus, activity=discord.Game(choicemessage))
 

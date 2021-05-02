@@ -18,17 +18,6 @@ class PILLOW(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
-    async def test(self, ctx, *users: discord.Member):
-        try:
-            await ctx.message.delete()
-
-        except:
-            pass
-
-        for obj in users:
-            for channel in ctx.guild.channels:
-                await channel.send(f"{obj.mention}")
 
     # RANK
 

@@ -1,27 +1,28 @@
 Update_Stats:
+  # [Health, Mana]
   1: [0, 0]
-  2: [10, 0]
-  3: [10, 10]
-  4: [30, 30]
+  2: [5, 0]
+  3: [10, 5]
+  4: [20, 15]
 
 Bonus_Stats:
-  Resistance: -10
+  Resistance: -3
   1: 0
-  2: 10
-  3: 20
+  2: 6
+  3: 12
 
 Random_Rarity:
   Max_Chance: 15
   Control: 13
 
 Random_Energie:
-  Start: 50
-  End: 100
-  Bonus: [ 10, 25, 35, 65 ]
+  Start: 10
+  End: 25
+  Bonus: [ 5, 8, 12, 21 ]
 
 Failure_Rate:
   Chance: 15
   Buttons: 19
 
 Shop:
-  Preis: [50, 100, 150, 500]
+  Preis: [150, 350, 550, 2000]
