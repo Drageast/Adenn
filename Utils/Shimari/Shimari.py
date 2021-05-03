@@ -121,6 +121,10 @@ class ShimariBASE:
         return "Exotisch" if self.Rarity == 4 else (
             "Legendär" if self.Rarity == 3 else ("Selten" if self.Rarity == 2 else "Normal"))
 
+    def GetColor(self):
+        return Farbe.ShimariFarben.Exotisch if self.Rarity == 4 else (
+            Farbe.ShimariFarben.Legendaer if self.Rarity == 3 else (Farbe.ShimariFarben.Selten if self.Rarity == 2 else Farbe.ShimariFarben.Normal))
+
     def fight_data(self, damage=None):
         y = f"\n`Schaden`: {damage}" if damage is not None else ""
         x = f"`Leben`: {self.Health}\n`Mana`: {self.Mana}{y}"
@@ -367,7 +371,7 @@ class DiscordShimari:
 
                     embed = discord.Embed(
                         title=":~Shop~:",
-                        colour=discord.Colour(Farbe.ShimariRosa),
+                        colour=discord.Colour(Shimari_.GetColor()),
                         description=f"Möchtest du das Shimari: **{Shimari_.Name}** für **{Shimari_.price()}**₹ verkaufen?"
                     )
                     embed.set_image(url=Shimari_.avatar())
@@ -380,7 +384,7 @@ class DiscordShimari:
                 if str(reaction.emoji) == "✔":
                     embed = discord.Embed(
                         title=":~Shop~:",
-                        colour=discord.Colour(Farbe.ShimariRosa),
+                        colour=discord.Colour(Shimari_.GetColor()),
                         description=f"Du hast das Shimari: **{Shimari_.Name}** für **{Shimari_.price()}**₹ verkauft."
                     )
                     embed.set_image(url=Shimari_.avatar())

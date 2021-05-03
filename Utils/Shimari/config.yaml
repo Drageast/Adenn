@@ -13,7 +13,7 @@ Bonus_Stats:
 
 Random_Rarity:
   Max_Chance: 15
-  Control: 13
+  Control: 11
 
 Random_Energie:
   Start: 10

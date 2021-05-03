@@ -31,8 +31,10 @@ async def on_ready():
     client.State = State
 
     await client.change_presence(status=choicestatus, activity=discord.Game(choicemessage))
-
-    initialize()
+    try:
+        initialize()
+    except commands.ExtensionAlreadyLoaded:
+        pass
     print(f"State: |{choice}| ; Logged in as: |{client.user}| ; Latency: |{client.latency}|\n")
 
     Base = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Base")

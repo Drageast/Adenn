@@ -35,7 +35,7 @@ class CurCommands(commands.Cog):
         embed.set_author(name="Credit Bank", icon_url=Utils.YAML.GET("Bilder", "Credits"))
         embed.set_thumbnail(url=user.avatar_url)
         embed.add_field(name="Credits:", value=f"**{data.bal}**₹")
-        embed.add_field(name="Sperrung:", value=f"{'Ja' if data.lock else 'Nein'}")
+        embed.add_field(name="Sperrung:", value=f"{'Ja' if data.lock is True else 'Nein'}")
 
         await Utils.Messaging.Universal_send(ctx, embed, 15)
 

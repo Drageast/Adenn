@@ -30,7 +30,7 @@ class ShimariCommands(commands.Cog):
     async def Shi(self, ctx):
         embed = discord.Embed(
             title=":~Shimari~:",
-            colour=discord.Colour(Utils.Farbe.ShimariRosa),
+            colour=discord.Colour(Utils.Farbe.Darker_Theme),
             description=f"Dies ist die Shimari Gruppe.\nDu kannst hier kämpfe starten und deinen Index ansehen.\n\n**[Shimari Info](https://github.com/Drageast/shimari-data)** -"
                         f" Daten können jeder Zeit geändert!"
         )
@@ -44,7 +44,7 @@ class ShimariCommands(commands.Cog):
     async def debug(self, ctx):
         embed = discord.Embed(
             title="DEBUG",
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=discord.Colour(Utils.Farbe.Darker_Theme),
             description="Shimari Debug Bereich."
         )
 
@@ -111,7 +111,7 @@ class ShimariCommands(commands.Cog):
 
         embed = discord.Embed(
             title=f":~Shimari~:",
-            colour=discord.Colour.dark_red(),
+            colour=discord.Colour(Utils.Farbe.Darker_Theme),
             description=f"{ctx.author.mention} bitte wähle ein Shimari zum Kämpfen:"
         )
 
@@ -157,7 +157,7 @@ class ShimariCommands(commands.Cog):
 
         embed = discord.Embed(
             title=f":~Shimari~:",
-            colour=discord.Colour.dark_red(),
+            colour=discord.Colour(Utils.Farbe.Darker_Theme),
             description=f"{user.mention} bitte wähle ein Shimari zum Kämpfen:"
         )
 
@@ -205,10 +205,10 @@ class ShimariCommands(commands.Cog):
 
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(User_Shimari.GetColor()),
                 description=f"{user.mention} Wähle eine Attacke für: **{User_Shimari.Name}**!\n{User_Shimari.post_fight_data()}"
             )
-            embed.set_image(url=User_Shimari.avatar())
+            embed.set_thumbnail(url=User_Shimari.avatar())
 
             await m.edit(embed=embed)
             await m.add_reaction(self.Numbers[0])
@@ -231,7 +231,7 @@ class ShimariCommands(commands.Cog):
 
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Utils.Farbe.Darker_Theme),
                 description=f"Der Angriff von {user.mention} ist beendet!"
             )
             embed.add_field(name=f"Angreifer {user.name}/{User_Shimari.Name}:",
@@ -248,10 +248,10 @@ class ShimariCommands(commands.Cog):
 
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Author_Shimari.GetColor()),
                 description=f"{ctx.author.mention} Wähle eine Attacke für: **{Author_Shimari.Name}**!\n{Author_Shimari.post_fight_data()}"
             )
-            embed.set_image(url=Author_Shimari.avatar())
+            embed.set_thumbnail(url=Author_Shimari.avatar())
 
             await m.edit(embed=embed)
             await m.add_reaction(self.Numbers[0])
@@ -274,7 +274,7 @@ class ShimariCommands(commands.Cog):
 
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Utils.Farbe.Darker_Theme),
                 description=f"Der Angriff von {ctx.author.mention} ist beendet!"
             )
             embed.add_field(name=f"Angreifer {ctx.author.name}/{Author_Shimari.Name}:",
@@ -285,46 +285,26 @@ class ShimariCommands(commands.Cog):
             m = await ctx.send(embed=embed)
             await asyncio.sleep(5)
 
-            if User_Shimari.Health <= 0 or Author_Shimari.Health <= 0 or User_Shimari.Energie <= 0 or Author_Shimari.Energie <= 0:
+            if User_Shimari.Health <= 0 or Author_Shimari.Health <= 0 or User_Shimari.Mana <= 0 or Author_Shimari.Mana <= 0:
                 break
 
             Author_Shimari.random_Energie()
             User_Shimari.random_Energie()
 
-        if User_Shimari.Mana <= 0:
+        if User_Shimari.Mana <= 0 or User_Shimari.Mana <= 0:
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Utils.Farbe.Lp_Green),
                 description=f"{ctx.author.mention} hat gewonnen!"
             )
 
             await Utils.Messaging.Universal_edit(m, embed, 15)
             return
 
-        elif User_Shimari.Mana <= 0:
+        elif Author_Shimari.Health <= 0 or Author_Shimari.Mana <= 0:
             embed = discord.Embed(
                 title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
-                description=f"{ctx.author.mention} hat gewonnen!"
-            )
-
-            await Utils.Messaging.Universal_edit(m, embed, 15)
-            return
-
-        elif Author_Shimari.Health <= 0:
-            embed = discord.Embed(
-                title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
-                description=f"{user.mention} hat gewonnen!"
-            )
-
-            await Utils.Messaging.Universal_edit(m, embed, 15)
-            return
-
-        elif Author_Shimari.Mana <= 0:
-            embed = discord.Embed(
-                title=":~Shimari~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Utils.Farbe.Lp_Green),
                 description=f"{user.mention} hat gewonnen!"
             )
 
@@ -348,7 +328,7 @@ class ShimariCommands(commands.Cog):
             y += 1
             embed = discord.Embed(
                 title=f":~ShimarIdex : {User.name}~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Utils.Farbe.Darker_Theme),
                 description=f"Dieser Nutzer besitzt noch keine Shimaris oder es ist ein Fehler aufgetreten."
             )
             embeds.append(embed)
@@ -361,7 +341,7 @@ class ShimariCommands(commands.Cog):
 
                 embed = discord.Embed(
                     title=f":~Shimari Index[{index}] - Sammlung~:",
-                    colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                    colour=discord.Colour(Shimari_.GetColor()),
                     description=f"{Shimari_}"
                 )
                 embed.set_image(url=Shimari_.avatar())
@@ -371,6 +351,7 @@ class ShimariCommands(commands.Cog):
         inf = f"ShimarIdex von: **{User.name}** Seiten: `{y}`"
 
         await Utils.Messaging.Paginator(self, ctx, embeds, inf)
+
 
     @Shi.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
@@ -382,7 +363,7 @@ class ShimariCommands(commands.Cog):
             Shimari_ = Utils.Shimari.DiscordShimari.Create_Shimari(obj)
             embed = discord.Embed(
                 title=":~Shop~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(Shimari_.GetColor()),
                 description=f"{Shimari_}"
             )
             embed.set_image(url=Shimari_.avatar())
@@ -401,12 +382,14 @@ class ShimariCommands(commands.Cog):
         embeds = []
 
         for index, x in enumerate(shimari_list):
+
             embed = discord.Embed(
                 title=f":~Shimari Index[{index}] - Liste~:",
-                colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                colour=discord.Colour(x.GetColor()),
                 description=f"{x}\n\n**Werte können abweichen!**"
             )
             embed.set_thumbnail(url=x.avatar())
+
             if Debug:
                 if Debug.lower() == "key":
                     y = ""
@@ -467,7 +450,7 @@ class ShimariCommands(commands.Cog):
 
                 embed = discord.Embed(
                     title=":~Shimari~:",
-                    colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                    colour=discord.Colour(AI.GetColor()),
                     description=f"Ein Wildes Shimari ist aufgetaucht **({AI.Name})**! Der erste der die angegebene Reaktion anklickt, hat die chance dies zu fangen!"
                 )
                 embed.set_image(url=AI.avatar())
@@ -477,7 +460,7 @@ class ShimariCommands(commands.Cog):
                 await m.add_reaction("❗")
                 await asyncio.sleep(1)
                 try:
-                    reaction, user = await self.client.wait_for("reaction_add", check=check, timeout=60)
+                    reaction, user = await self.client.wait_for("reaction_add", check=check, timeout=360)
                 except:
                     try:
                         await m.delete()
@@ -490,14 +473,14 @@ class ShimariCommands(commands.Cog):
                 def check1(reaction, user_):
                     return str(reaction.emoji) in self.Numbers and user_ == user
 
-                list = await Utils.MongoDataBase.Uccounts.check_Uccount(self, user, user.id, 4)
+                liste = await Utils.MongoDataBase.Uccounts.check_Uccount(self, user, user.id, 4)
 
                 embed = discord.Embed(
                     title=":~Shimari~:",
-                    colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                    colour=discord.Colour(Utils.Farbe.Darker_Theme),
                     description=f"{user.mention} wähle dein Shimari für den Kampf!"
                 )
-                for index, Shimari in enumerate(list.ShimariList):
+                for index, Shimari in enumerate(liste.ShimariList):
                     if index <= 9:
                         embed.add_field(name=f"{index + 1}",
                                         value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}")
@@ -510,13 +493,13 @@ class ShimariCommands(commands.Cog):
 
                 m = await channel.send(embed=embed)
 
-                for i, _ in enumerate(list.ShimariList):
+                for i, _ in enumerate(liste.ShimariList):
                     if i <= 9:
                         await m.add_reaction(self.Numbers[i])
                     else:
                         pass
                 try:
-                    reaction, _ = await self.client.wait_for("reaction_add", check=check1, timeout=60)
+                    reaction, _ = await self.client.wait_for("reaction_add", check=check1, timeout=360)
                 except asyncio.TimeoutError:
 
                     await m.edit(message=f"{user.mention} hat zu lange gewartet.")
@@ -546,16 +529,16 @@ class ShimariCommands(commands.Cog):
 
                 await m.clear_reactions()
 
-                User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(list.ShimariList[index1])
+                User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(liste.ShimariList[index1])
 
                 while User_Shimari.Health >= 0 or AI.Health >= 0 or User_Shimari.Mana >= 0 or AI.Mana >= 0:
 
                     embed = discord.Embed(
                         title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                        colour=discord.Colour(User_Shimari.GetColor()),
                         description=f"{user.mention} Wähle eine Attacke für: **{User_Shimari.Name}**!\n{User_Shimari.post_fight_data()}"
                     )
-                    embed.set_image(url=User_Shimari.avatar())
+                    embed.set_thumbnail(url=User_Shimari.avatar())
 
                     await m.edit(embed=embed)
                     await m.add_reaction(self.Numbers[0])
@@ -575,7 +558,7 @@ class ShimariCommands(commands.Cog):
                         await m.add_reaction(self.Numbers[2])
 
                     try:
-                        reaction, user_ = await self.client.wait_for("reaction_add", check=check1, timeout=60)
+                        reaction, user_ = await self.client.wait_for("reaction_add", check=check1, timeout=360)
                     except asyncio.TimeoutError:
 
                         await m.edit(message=f"{user.mention} hat zu lange gewartet.")
@@ -590,7 +573,7 @@ class ShimariCommands(commands.Cog):
 
                     embed = discord.Embed(
                         title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                        colour=discord.Colour(Utils.Farbe.Darker_Theme),
                         description=f"Der Angriff von {user.mention} ist beendet!"
                     )
                     embed.add_field(name=f"Angreifer {User_Shimari.Name}:",
@@ -610,7 +593,7 @@ class ShimariCommands(commands.Cog):
 
                     embed = discord.Embed(
                         title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                        colour=discord.Colour(Utils.Farbe.Darker_Theme),
                         description=f"Der Angriff von **{AI.Name}** ist beendet!"
                     )
                     embed.add_field(name=f"Angreifer {AI.Name}:", value=f"{AI.fight_data(data1.damage)}")
@@ -627,42 +610,20 @@ class ShimariCommands(commands.Cog):
                     AI.random_Energie()
                     User_Shimari.random_Energie()
 
-                if User_Shimari.Health <= 0:
+                if User_Shimari.Health <= 0 or User_Shimari.Mana <= 0:
                     embed = discord.Embed(
                         title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                        colour=discord.Colour(Utils.Farbe.Dp_Red),
                         description=f"**{AI.Name}** hat gewonnen!"
                     )
 
                     await Utils.Messaging.Universal_edit(m, embed, 15)
                     return
 
-                elif User_Shimari.Mana <= 0:
+                elif AI.Health <= 0 or AI.Mana <= 0:
                     embed = discord.Embed(
                         title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
-                        description=f"**{AI.Name}** hat gewonnen!"
-                    )
-
-                    await Utils.Messaging.Universal_edit(m, embed, 15)
-                    return
-
-                elif AI.Health <= 0:
-                    embed = discord.Embed(
-                        title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
-                        description=f"{user.mention} hat gewonnen!\nDu hast das Shimari \n{Utils.Shimari.DiscordShimari.Create_Shimari(AI.tuple_Shimari())}\ngefangen!"
-                    )
-                    embed.set_image(url=AI.avatar())
-
-                    await Utils.Uccounts.update_Shimari(self, user, user.id, AI.tuple_Shimari(), "+")
-                    await Utils.Messaging.Universal_edit(m, embed, 15)
-                    return
-
-                elif AI.Mana <= 0:
-                    embed = discord.Embed(
-                        title=":~Shimari~:",
-                        colour=discord.Colour(Utils.Farbe.ShimariRosa),
+                        colour=discord.Colour(AI.GetColor()),
                         description=f"{user.mention} hat gewonnen!\nDu hast das Shimari \n{Utils.Shimari.DiscordShimari.Create_Shimari(AI.tuple_Shimari())}\ngefangen!"
                     )
                     embed.set_image(url=AI.avatar())

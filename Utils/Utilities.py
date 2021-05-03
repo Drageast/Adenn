@@ -21,7 +21,8 @@ class Wrappers:
         def wrapper_NONE_async(*args, **kwargs):
             before = time.time()
             func_ = func(*args, **kwargs)
-            print(f"Executed Function: |{func.__name__}|-|NONE_ASYNC| ; Execution took: |{time.time() - before} seconds|")
+            print(
+                f"Executed Function: |{func.__name__}|-|NONE_ASYNC| ; Execution took: |{time.time() - before} seconds|")
             return func_
 
         @functools.wraps(func)
@@ -79,7 +80,7 @@ class YAML:
     @staticmethod
     @Wrappers.TimeLogger
     def TOKEN(password: int):
-        password_ = password**4
+        password_ = password ** 4
 
         if password_ == YAML.GET("Variables", "ClientSide", "Password"):
 
@@ -91,9 +92,9 @@ class YAML:
 
 class Messaging:
 
-
     @staticmethod
-    async def Universal_send(context: [commands.Context, discord.Message], obj: [discord.Embed, discord.File, str], seconds: float = 8):
+    async def Universal_send(context: [commands.Context, discord.Message], obj: [discord.Embed, discord.File, str],
+                             seconds: float = 8):
 
         # Embed Check
         if isinstance(obj, discord.Embed):
@@ -212,7 +213,6 @@ class Messaging:
         else:
             raise AttributeError("Objekt ist nicht: [discord.Embed, discord.File, str]")
 
-
     @staticmethod
     async def Universal_edit(message_obj, obj: [discord.Embed, discord.File, str], seconds: float = 8):
 
@@ -270,7 +270,6 @@ class Messaging:
         else:
 
             raise AttributeError(f"Objekt ist nicht: [discord.Embed, discord.File, str] => {type(obj)}")
-
 
     @staticmethod
     async def Paginator(self, ctx, content: list, info: str = None):
@@ -434,3 +433,15 @@ class Farbe:
     Darker_Theme = 0x23272a
 
     ShimariRosa = 0xff00ff
+
+    class ShimariFarben:
+
+        PlaceHolder = 0xff00ff
+
+        Normal = 0x5e5e5e
+
+        Selten = 0xac6ec
+
+        Legendaer = 0xf508e4
+
+        Exotisch = 0xf7db6b
