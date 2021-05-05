@@ -10,6 +10,10 @@ Variables:
     Webhooks:
       System: "https://discordapp.com/api/webhooks/815708355371860069/gy3_edx9paMdTg6f-0WL2qOlWnGKalV_10SPwK3jjdWV3f4dPSbvLStyDmClkAVQBRgu"
 
+    GitHub:
+      ShimariData: "https://raw.githubusercontent.com/Drageast/shimari-data/master/shimari.yaml"
+      Balancing: "https://raw.githubusercontent.com/Drageast/shimari-data/master/balancing.yaml"
+
     Channels:
       Shimari: "shimari"
       Shimari_TEST: 837727003209760819

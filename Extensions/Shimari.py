@@ -93,7 +93,9 @@ class ShimariCommands(commands.Cog):
 
         await Utils.Messaging.Universal_send(ctx, m, 15)
 
+
     # Shimari Commands
+
 
     @Shi.command()
     @Utils.Wrappers.TimeLogger

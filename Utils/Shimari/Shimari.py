@@ -1,4 +1,5 @@
 from Utils.Utilities import Wrappers, Farbe, Messaging
+from Utils.Utilities import YAML as UtilYaml
 from Utils.ErrorHandler import YAMLError
 from Utils.MongoDataBase import Uccounts
 import yaml
@@ -6,6 +7,12 @@ import discord
 from discord.ext import commands
 import random
 import asyncio
+import requests
+import os
+
+
+class Object(object):
+    pass
 
 
 class YAML:
@@ -71,8 +78,27 @@ class YAML:
                 raise YAMLError("Die angegebene ID ist ungültig!")
 
 
-class Object(object):
-    pass
+    @staticmethod
+    @Wrappers.TimeLogger
+    async def Update(filename: str):
+        if not os.path.exists(f"Utils/Shimari/{filename}") and filename in ["config.yaml", "ShimariData.yaml"]:
+            with open(f"Utils/Shimari/{filename}", "w") as f:
+                f.write("")
+
+        if filename == "config.yaml":
+            data = requests.get(UtilYaml.GET("Variables", "ClientSide", "GitHub", "Balancing"))
+
+            with open(f"Utils/Shimari/{filename}", "wb") as f:
+                f.write(data.content)
+            return
+
+        if filename == "ShimariData.yaml":
+
+            data = requests.get(UtilYaml.GET("Variables", "ClientSide", "GitHub", "ShimariData"))
+
+            with open(f"Utils/Shimari/{filename}", "wb") as f:
+                f.write(data.content)
+            return
 
 
 class ShimariBASE:
@@ -427,4 +453,3 @@ class DiscordShimari:
             print("Failure")
             return rnum2
         return 0
-

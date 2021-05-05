@@ -1,4 +1,6 @@
 __author__ = "Luca Michael Schmidt"
+__version__ = "4.01"
+
 
 # Import
 import os
@@ -32,10 +34,10 @@ async def on_ready():
 
     await client.change_presence(status=choicestatus, activity=discord.Game(choicemessage))
     try:
-        initialize()
+        await initialize()
     except commands.ExtensionAlreadyLoaded:
         pass
-    print(f"State: |{choice}| ; Logged in as: |{client.user}| ; Latency: |{client.latency}|\n")
+    print(f"\nState: |{choice}| ; Logged in as: |{client.user}| ; Latency: |{client.latency}|\n")
 
     Base = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Base")
     Con1 = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Connection1")
@@ -46,21 +48,26 @@ async def on_ready():
     client.Uccount = client.mongo[Base][Con2]
 
 
-    print(f"\nDatabase State: |{choice}| ; Latency: |{Utils.Checker.LATENCY(client)}|")
+    print(f"\nDatabase State: |{choice}| ; Latency: |{Utils.Checker.LATENCY(client)}|\n")
 
 
 # Cog - Initialisierung
 
 
-def initialize():
+async def initialize():
     x = 0
     before = time.time()
+
+    await Utils.Shimari.YAMLShi.Update("config.yaml")
+    await Utils.Shimari.YAMLShi.Update("ShimariData.yaml")
+
+    print(f"\nSuccess -|REQUEST| ; Pulled from: |GitHub - Drageast|\n")
 
     for filename in os.listdir('Extensions'):
         client.load_extension(f'Extensions.{filename[:-3]}') if filename.endswith(".py") else None
         x += 1
 
-    print(f"\nFound Cogs in Extensions: |{x}|-|FOR_LOOP| ; Execution took: |{time.time() - before} seconds|")
+    print(f"\nFound Cogs in Extensions: |{x}|-|FOR_LOOP| ; Execution took: |{time.time() - before} seconds|\n")
 
 
 # Token / RUN

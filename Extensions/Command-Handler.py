@@ -136,10 +136,21 @@ class HANDLER(commands.Cog):
 
                 await Utils.Messaging.Universal_send(ctx, embed, 15)
 
-            if isinstance(error.original, Utils.UccountError):
+            elif isinstance(error.original, Utils.UccountError):
 
                 embed = discord.Embed(
                     title='-Uccount-',
+                    colour=discord.Colour(Utils.Farbe.Red),
+                    description=f'{error.__context__}'
+                )
+                embed.set_thumbnail(url=self.client.user.avatar_url)
+
+                await Utils.Messaging.Universal_send(ctx, embed, 15)
+
+            elif isinstance(error.original, Utils.YAMLError):
+
+                embed = discord.Embed(
+                    title='-YAML-',
                     colour=discord.Colour(Utils.Farbe.Red),
                     description=f'{error.__context__}'
                 )
