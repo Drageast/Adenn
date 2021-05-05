@@ -138,7 +138,7 @@ class ADMINISTRATION(commands.Cog):
     @commands.command()
     @commands.is_owner()
     @Utils.Wrappers.TimeLogger
-    async def masstell(self, ctx, *, message):
+    async def masstell(self, ctx, Kennzeichnung: str, *, message):
 
         embed = discord.Embed(
             title="<SUPPORT>",
@@ -146,7 +146,7 @@ class ADMINISTRATION(commands.Cog):
             description=f"{message}",
             timestamp=datetime.utcnow()
         )
-        embed.set_footer(text=f"Massen-Benachrichtigung von Developer: {ctx.author.name}")
+        embed.set_footer(text=f"Massen-Benachrichtigung von {Kennzeichnung}: {ctx.author.name}")
 
 
         try:

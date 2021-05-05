@@ -129,7 +129,7 @@ class ShimariCommands(commands.Cog):
         )
 
         for index, Shimari in enumerate(list1.ShimariList):
-            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}")
+            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
 
         m = await ctx.send(embed=embed)
 
@@ -175,7 +175,7 @@ class ShimariCommands(commands.Cog):
         )
 
         for index, Shimari in enumerate(list2.ShimariList):
-            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}")
+            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
 
         await m.edit(embed=embed)
 
@@ -495,8 +495,7 @@ class ShimariCommands(commands.Cog):
                 )
                 for index, Shimari in enumerate(liste.ShimariList):
                     if index <= 9:
-                        embed.add_field(name=f"{index + 1}",
-                                        value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}")
+                        embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
                     elif index == 10:
                         embed.add_field(name=f"-----",
                                         value=f"Ich kann max. die ersten 10 Shimaris anzeigen.")
@@ -578,6 +577,13 @@ class ShimariCommands(commands.Cog):
                         await asyncio.sleep(10)
                         await m.delete()
                         break
+
+                    while reaction == self.Failure:
+                        try:
+                            await m.remove_reaction(reaction, user_)
+                        except:
+                            pass
+                        reaction, user_ = await self.client.wait_for("reaction_add", check=check1)
 
                     attack1 = 1 if str(reaction.emoji) == self.Numbers[0] else (
                         2 if str(reaction.emoji) == self.Numbers[1] else 3)
