@@ -93,6 +93,17 @@ class ShimariCommands(commands.Cog):
 
         await Utils.Messaging.Universal_send(ctx, m, 15)
 
+    @debug.command()
+    @commands.is_owner()
+    @Utils.Wrappers.TimeLogger
+    async def GitPull(self, ctx):
+
+        await Utils.Shimari.YAMLShi.Update("config.yaml")
+        await Utils.Shimari.YAMLShi.Update("ShimariData.yaml")
+
+        m = f"**Du hast `config.yaml` und `ShimariData` über GitHub aktualisiert.**"
+
+        await Utils.Messaging.Universal_send(ctx, m, 15)
 
     # Shimari Commands
 
