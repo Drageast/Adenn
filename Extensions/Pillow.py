@@ -84,10 +84,10 @@ class PILLOW(commands.Cog):
 
             output = ImageOps.fit(av, mask.size, centering=(0.5, 0.5))
             output.putalpha(mask)
-            output.save('Images/output.png')
+            output.save('Utils/Images/output.png')
 
             # TEXT
-            ranking = Image.open('Images/Ranking_card.jpg')
+            ranking = Image.open('Utils/Images/Ranking_card.jpg')
             draw = ImageDraw.Draw(ranking)
             font = ImageFont.truetype("Utils/Discord_font.ttf", 85)
             draw.text((645, 155), f"| {user.name} | XP: {xp}/{int(200 * ((1 / 2) * lvl))} | Lvl: {lvl} |",
@@ -100,14 +100,14 @@ class PILLOW(commands.Cog):
             ImageDraw.floodfill(ranking, xy=(166, 616), value=color, thresh=40)
 
             # SAVE
-            ranking.save('Images/overlap.png')
+            ranking.save('Utils/Images/overlap.png')
 
-            file = discord.File('Images/overlap.png')
+            file = discord.File('Utils/Images/overlap.png')
 
         await Utils.Messaging.Universal_send(ctx, file, 14)
         try:
-            os.remove('Images/overlap.png')
-            os.remove('Images/output.png')
+            os.remove('Utils/Images/overlap.png')
+            os.remove('Utils/Images/output.png')
         except:
             pass
 

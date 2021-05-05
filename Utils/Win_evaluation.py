@@ -79,6 +79,23 @@ class BlackJack_Duell:
 
         for p in chars:
 
+            if BlackJack_Duell.pointCount(pl1P) == 21 == BlackJack_Duell.pointCount(pl2P):
+                pl1E = discord.Embed(
+                    title="-BLACK-JACK-",
+                    colour=discord.Colour(Farbe.Lp_Green),
+                    description=f"Ihr habt einen Blackjack!\nIhr habt alles erstattet bekommen!"
+                )
+                pl1E.add_field(name=f'**{pl2.name}`s Hand:**',
+                               value=f'{str(pl1P).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Duell.pointCount(pl1P))}')
+                pl1E.add_field(name=f'**{pl2.name}`s Hand:**',
+                               value=f'{str(pl2P).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Duell.pointCount(pl2P))}')
+
+
+                await Embed_pl1.edit(embed=pl1E)
+                await Embed_pl2.edit(embed=pl1E)
+                return 3, 3
+
+
             if BlackJack_Duell.pointCount(pl1P) == 21:
 
                 pl1E = discord.Embed(

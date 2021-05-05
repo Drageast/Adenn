@@ -48,6 +48,7 @@ async def on_ready():
 
     print(f"\nDatabase State: |{choice}| ; Latency: |{Utils.Checker.LATENCY(client)}|")
 
+
 # Cog - Initialisierung
 
 

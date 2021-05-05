@@ -16,6 +16,24 @@ class Games(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command()
+    async def pspam(self, ctx, user: discord.Member, Anzahl: int, *, Nachricht):
+        x = 0
+        await ctx.message.delete()
+        m = await ctx.send(f"Ich werde versuchen, `{Anzahl}` Nachrichten zu senden")
+
+        async with ctx.typing():
+
+            for _ in range(Anzahl):
+                x += 1
+
+                try:
+                    await user.send(f"{Nachricht}")
+                except Exception as e:
+                    await m.edit(f"Bei der Ausführung ist ein Fehler aufgetreten; `{e}`")
+
+        await Utils.Messaging.Universal_edit(m, f"Ich habe `{x}` Nachrichten an `{user.name}` gesendet.", 15)
+
     @commands.command(aliases=["ssp"])
     async def sspg(self, ctx):
 

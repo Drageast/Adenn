@@ -111,7 +111,7 @@ class ShimariBASE:
         return self.__dict__[item]
 
     def debug(self):
-        x = [{"Name": self.Name, "Motto": self.Motto},
+        x = [{"ID": self.ID, "Name": self.Name, "Motto": self.Motto},
              {"KDTN": {"Mana": self.Mana, "Kosten": self.Cost, "Schaden": self.Damage, "Leben": self.Health}},
              {"KDTN": {"Element": self.Element, "Resistenz": self.Resistance}},
              {"KDTN": {"Seltenheit - Integer": self.Rarity, "Seltenheit - String": self.GetRarity()}}]
@@ -197,6 +197,8 @@ class Shimari(ShimariBASE):
     @Wrappers.TimeLogger
     def fight(Shimari1: ShimariBASE, Shimari2: ShimariBASE, Attack: int):
         Chance = random.randint(1, 10)
+        if Shimari2["Operator"] == "AI":
+            Chance -= 1
 
         bonus = YAML.GET("Bonus_Stats", "Resistance") if Shimari1.Element == Shimari2.Resistance else \
             (YAML.GET("Bonus_Stats", 1) if Attack == 1 else (
