@@ -70,6 +70,7 @@ class YAML:
                 UnPacked.Element = raw_Shimari["KDTN"]["Element"][0]
                 UnPacked.Element_Resistenz = raw_Shimari["KDTN"]["Element"][1]
                 UnPacked.Seltenheit = raw_Shimari["KDTN"]["Seltenheit"]
+                UnPacked.Legacy = raw_Shimari["Legacy"]
 
                 return UnPacked
 
@@ -117,6 +118,7 @@ class ShimariBASE:
         self.Element: str = self.Data.Element
         self.Resistance: str = self.Data.Element_Resistenz
         self.Rarity: int = self.Data.Seltenheit
+        self.Legacy = self.Data.Legacy
         self.Operator: str = "Player"
 
         while "1" in self.Motto:
@@ -127,7 +129,7 @@ class ShimariBASE:
             self.Motto = self.Motto.replace("3", "ü")
 
     def __str__(self):
-        return f"\n`Name`: _{self.Name}_\n`Motto`:\n_{self.Motto}_\n`Mana`: _{self.Mana}_\n`Angriffskosten`: _{self.Cost}_" \
+        return f"`Legacy`: __{self.Legacy}__\n`Name`: _{self.Name}_\n`Motto`:\n_{self.Motto}_\n`Mana`: _{self.Mana}_\n`Angriffskosten`: _{self.Cost}_" \
                f"\n`Schaden`: _{self.Damage}_\n`Leben`: _{self.Health}_\n`Element`: _{self.Element}_\n`Resistenz`: _{self.Resistance}_\n`Seltenheit`: **{self.GetRarity()}**\n"
 
     def __setitem__(self, key, value):
