@@ -7,7 +7,6 @@ import os
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
-import time
 
 
 # Utils
@@ -55,19 +54,31 @@ async def on_ready():
 
 
 async def initialize():
-    x = 0
-    before = time.time()
 
     await Utils.Shimari.YAMLShi.Update("config.yaml")
     await Utils.Shimari.YAMLShi.Update("ShimariData.yaml")
 
     print(f"\nSuccess -|REQUEST| ; Pulled from: |GitHub - Drageast|\n")
 
-    for filename in os.listdir('Extensions'):
-        client.load_extension(f'Extensions.{filename[:-3]}') if filename.endswith(".py") else None
-        x += 1
 
-    print(f"\nFound Cogs in Extensions: |{x}|-|FOR_LOOP| ; Execution took: |{time.time() - before} seconds|\n")
+    for filename in os.listdir('Extensions'):
+        if os.path.isfile(f"Extensions/{filename}"):
+            if filename.endswith(".py") and not filename.startswith("__") and not filename.endswith(".pyc"):
+                try:
+                    client.load_extension(f'Extensions.{filename[:-3]}')
+                    print(f"Loaded Extension: |{filename}|")
+                except Exception as e:
+                    print(f"ERROR Loading Extension: |{filename}| ; Error: |{e}|")
+                    continue
+        else:
+            for filename2 in os.listdir(f"Extensions/{filename}"):
+                if filename2.endswith(".py") and not filename2.startswith("__") and not filename2.endswith(".pyc"):
+                    try:
+                        client.load_extension(f'Extensions.{filename}.{filename2[:-3]}')
+                        print(f"Loaded Extension: |{filename}.{filename2}|")
+                    except Exception as e:
+                        print(f"ERROR Loading Extension: |{filename}.{filename2}| ; Error: |{e}|")
+                        continue
 
 
 # Token / RUN

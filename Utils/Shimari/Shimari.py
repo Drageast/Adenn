@@ -363,12 +363,15 @@ class DiscordShimari:
                         await message.edit(embed=contents[cur_page])
                         await message.remove_reaction(reaction, user)
                     else:
-                        pass
+                        await message.remove_reaction(reaction, user)
 
-                elif str(reaction.emoji) == "◀️" and cur_page > 0:
-                    cur_page -= 1
-                    await message.edit(embed=contents[cur_page])
-                    await message.remove_reaction(reaction, user)
+                if str(reaction.emoji) == "◀️":
+                    if cur_page > 0:
+                        cur_page -= 1
+                        await message.edit(embed=contents[cur_page])
+                        await message.remove_reaction(reaction, user)
+                    else:
+                        await message.remove_reaction(reaction, user)
 
                 elif str(reaction.emoji) == "⏹️":
                     try:
@@ -442,6 +445,54 @@ class DiscordShimari:
                 except:
                     pass
                 break
+
+    @staticmethod
+    @Wrappers.TimeLogger
+    async def Choosing(self, channel: discord.TextChannel, User: discord.Member, content: list, shimari_list: list):
+
+        contents = content
+
+        pages = len(contents)
+
+        cur_page = 0
+
+        message = await channel.send(embed=contents[cur_page])
+
+        await message.add_reaction("◀️")
+        await message.add_reaction("✔")
+        await message.add_reaction("▶️")
+
+        def check(reaction, user):
+            return user == User and str(reaction.emoji) in ["◀️", "✔", "▶️"]
+
+        while True:
+            try:
+                reaction, user = await self.client.wait_for("reaction_add", timeout=120, check=check)
+            except asyncio.TimeoutError:
+                break
+
+            if str(reaction.emoji) == "▶️":
+                if cur_page != pages - 1:
+                    cur_page += 1
+                    await message.edit(embed=contents[cur_page])
+                    await message.remove_reaction(reaction, user)
+                else:
+                    await message.remove_reaction(reaction, user)
+
+            if str(reaction.emoji) == "◀️":
+                if cur_page > 0:
+                    cur_page -= 1
+                    await message.edit(embed=contents[cur_page])
+                    await message.remove_reaction(reaction, user)
+                else:
+                    await message.remove_reaction(reaction, user)
+
+            if str(reaction.emoji) == "✔":
+                await message.delete()
+                break
+
+        return shimari_list[cur_page]
+
 
     @staticmethod
     @Wrappers.TimeLogger

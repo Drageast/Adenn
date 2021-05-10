@@ -122,97 +122,38 @@ class ShimariCommands(commands.Cog):
         list1 = await Utils.MongoDataBase.Uccounts.check_Uccount(self, ctx, ctx.author.id, 4)
         list2 = await Utils.MongoDataBase.Uccounts.check_Uccount(self, ctx, user.id, 4)
 
-        embed = discord.Embed(
-            title=f":~Shimari~:",
-            colour=discord.Colour(Utils.Farbe.Darker_Theme),
-            description=f"{ctx.author.mention} bitte wähle ein Shimari zum Kämpfen:"
-        )
+        embeds1 = []
+        embeds2 = []
 
-        for index, Shimari in enumerate(list1.ShimariList):
-            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
-
-        m = await ctx.send(embed=embed)
-
-        for i, _ in enumerate(list1.ShimariList):
-            await m.add_reaction(self.Numbers[i])
-        try:
-            reaction, user_ = await self.client.wait_for("reaction_add", check=check1, timeout=60)
-        except asyncio.TimeoutError:
-
-            await m.edit(message=f"{ctx.author.mention} hat zu lange gewartet.")
-            await asyncio.sleep(10)
-            await m.delete()
-            return
-
-        index1 = 0 if str(reaction.emoji) == self.Numbers[0] else (
-            1 if str(reaction.emoji) == self.Numbers[1] else (
-                2 if str(reaction.emoji) == self.Numbers[2] else (
-                    3 if str(reaction.emoji) == self.Numbers[3] else (
-                        4 if str(reaction.emoji) == self.Numbers[4] else (
-                            5 if str(reaction.emoji) == self.Numbers[5] else (
-                                6 if str(reaction.emoji) == self.Numbers[6] else (
-                                    7 if str(reaction.emoji) == self.Numbers[7] else (
-                                        8 if str(reaction.emoji) == self.Numbers[8] else (
-                                            9 if str(reaction.emoji) == self.Numbers[9] else ()
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
+        for index, obj in enumerate(list1.ShimariList):
+            Shimari_ = Utils.Shimari.DiscordShimari.Create_Shimari(obj)
+            embed = discord.Embed(
+                title=f":~Shimari [{index + 1}/{len(list1.ShimariList)}]~:",
+                colour=discord.Colour(Shimari_.GetColor()),
+                description=f"{ctx.author.mention} deine Wahl!\n{Shimari_}"
             )
-        )
+            embed.set_image(url=Shimari_.avatar())
 
-        await m.clear_reactions()
+            embeds1.append(embed)
 
-        Author_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(list1.ShimariList[index1])
+        Shimari1 = await Utils.Shimari.DiscordShimari.Choosing(self, ctx.channel, ctx.author, embeds1, list1.ShimariList)
 
-        embed = discord.Embed(
-            title=f":~Shimari~:",
-            colour=discord.Colour(Utils.Farbe.Darker_Theme),
-            description=f"{user.mention} bitte wähle ein Shimari zum Kämpfen:"
-        )
-
-        for index, Shimari in enumerate(list2.ShimariList):
-            embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
-
-        await m.edit(embed=embed)
-
-        for i, _ in enumerate(list2.ShimariList):
-            await m.add_reaction(self.Numbers[i])
-        try:
-            reaction, user_ = await self.client.wait_for("reaction_add", check=check2, timeout=360)
-        except asyncio.TimeoutError:
-
-            await m.edit(message=f"{user.mention} hat zu lange gewartet.")
-            await asyncio.sleep(10)
-            await m.delete()
-            return
-
-        index2 = 0 if str(reaction.emoji) == self.Numbers[0] else (
-            1 if str(reaction.emoji) == self.Numbers[1] else (
-                2 if str(reaction.emoji) == self.Numbers[2] else (
-                    3 if str(reaction.emoji) == self.Numbers[3] else (
-                        4 if str(reaction.emoji) == self.Numbers[4] else (
-                            5 if str(reaction.emoji) == self.Numbers[5] else (
-                                6 if str(reaction.emoji) == self.Numbers[6] else (
-                                    7 if str(reaction.emoji) == self.Numbers[7] else (
-                                        8 if str(reaction.emoji) == self.Numbers[8] else (
-                                            9 if str(reaction.emoji) == self.Numbers[9] else ()
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
+        for index, obj in enumerate(list2.ShimariList):
+            Shimari_ = Utils.Shimari.DiscordShimari.Create_Shimari(obj)
+            embed = discord.Embed(
+                title=f":~Shimari [{index + 1}/{len(list1.ShimariList)}]~:",
+                colour=discord.Colour(Shimari_.GetColor()),
+                description=f"{user.mention} deine Wahl!\n{Shimari_}"
             )
-        )
+            embed.set_image(url=Shimari_.avatar())
 
-        await m.clear_reactions()
+            embeds2.append(embed)
 
-        User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(list2.ShimariList[index2])
+        Shimari2 = await Utils.Shimari.DiscordShimari.Choosing(self, ctx.channel, user, embeds2, list2.ShimariList)
+
+        Author_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(Shimari1)
+
+        User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(Shimari2)
 
         while User_Shimari.Health >= 0 or Author_Shimari.Health >= 0 or User_Shimari.Mana >= 0 or Author_Shimari.Mana >= 0:
 
@@ -457,6 +398,7 @@ class ShimariCommands(commands.Cog):
                 return str(reaction.emoji) == "❗" and user != user.bot
 
             while channel is not None:
+                embeds = []
 
                 AI = Utils.Shimari.DiscordShimari.Create_Shimari(Utils.Shimari.DiscordShimari.GET_randomShimari())
                 AI["Operator"] = "AI"
@@ -488,60 +430,22 @@ class ShimariCommands(commands.Cog):
 
                 liste = await Utils.MongoDataBase.Uccounts.check_Uccount(self, user, user.id, 4)
 
-                embed = discord.Embed(
-                    title=":~Shimari~:",
-                    colour=discord.Colour(Utils.Farbe.Darker_Theme),
-                    description=f"{user.mention} wähle dein Shimari für den Kampf!"
-                )
-                for index, Shimari in enumerate(liste.ShimariList):
-                    if index <= 9:
-                        embed.add_field(name=f"{index + 1}", value=f"{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).Name}\n{Utils.Shimari.DiscordShimari.Create_Shimari(Shimari).GetRarity()}")
-                    elif index == 10:
-                        embed.add_field(name=f"-----",
-                                        value=f"Ich kann max. die ersten 10 Shimaris anzeigen.")
-
-                    else:
-                        pass
-
-                m = await channel.send(embed=embed)
-
-                for i, _ in enumerate(liste.ShimariList):
-                    if i <= 9:
-                        await m.add_reaction(self.Numbers[i])
-                    else:
-                        pass
-                try:
-                    reaction, _ = await self.client.wait_for("reaction_add", check=check1, timeout=360)
-                except asyncio.TimeoutError:
-
-                    await m.edit(message=f"{user.mention} hat zu lange gewartet.")
-                    await asyncio.sleep(10)
-                    await m.delete()
-                    return
-
-                index1 = 0 if str(reaction.emoji) == self.Numbers[0] else (
-                    1 if str(reaction.emoji) == self.Numbers[1] else (
-                        2 if str(reaction.emoji) == self.Numbers[2] else (
-                            3 if str(reaction.emoji) == self.Numbers[3] else (
-                                4 if str(reaction.emoji) == self.Numbers[4] else (
-                                    5 if str(reaction.emoji) == self.Numbers[5] else (
-                                        6 if str(reaction.emoji) == self.Numbers[6] else (
-                                            7 if str(reaction.emoji) == self.Numbers[7] else (
-                                                8 if str(reaction.emoji) == self.Numbers[8] else (
-                                                    9 if str(reaction.emoji) == self.Numbers[9] else ()
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
+                for index, obj in enumerate(liste.ShimariList):
+                    Shimari_ = Utils.Shimari.DiscordShimari.Create_Shimari(obj)
+                    embed = discord.Embed(
+                        title=f":~Shimari [{index + 1}/{len(liste.ShimariList)}]~:",
+                        colour=discord.Colour(Shimari_.GetColor()),
+                        description=f"{Shimari_}"
                     )
-                )
+                    embed.set_image(url=Shimari_.avatar())
 
-                await m.clear_reactions()
+                    embeds.append(embed)
 
-                User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(liste.ShimariList[index1])
+                Shimari1 = await Utils.Shimari.DiscordShimari.Choosing(self, channel, user, embeds, liste.ShimariList)
+
+                User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(Shimari1)
+
+                m = await channel.send(".")
 
                 while User_Shimari.Health >= 0 or AI.Health >= 0 or User_Shimari.Mana >= 0 or AI.Mana >= 0:
 
