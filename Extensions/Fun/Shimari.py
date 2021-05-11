@@ -155,6 +155,8 @@ class ShimariCommands(commands.Cog):
 
         User_Shimari = Utils.Shimari.DiscordShimari.Create_Shimari(Shimari2)
 
+        m = await ctx.send(".")
+
         while User_Shimari.Health >= 0 or Author_Shimari.Health >= 0 or User_Shimari.Mana >= 0 or Author_Shimari.Mana >= 0:
 
             embed = discord.Embed(
