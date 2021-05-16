@@ -1,7 +1,6 @@
 import functools
 import inspect
 import yaml
-import sys
 import time
 import asyncio
 from .ErrorHandler import YAMLError
@@ -38,26 +37,12 @@ class Wrappers:
             return wrapper_NONE_async
 
 
-class Checker:
-
-    @staticmethod
-    @Wrappers.TimeLogger
-    def LATENCY(client):
-        before = time.time()
-        client.ticket.insert_one({"_id": 1})
-        after = time.time() - before
-        client.ticket.delete_one({"_id": 1})
-
-        return after
-
-
 class YAML:
 
     @staticmethod
-    @Wrappers.TimeLogger
     def PATH(container: str):
         try:
-            with open("Utils/config.yaml", "r") as f:
+            with open("Framework/config.yaml", "r") as f:
                 container_ = yaml.safe_load(f)
             container_ = container_[container]
             return container_
@@ -65,7 +50,6 @@ class YAML:
             raise YAMLError(e)
 
     @staticmethod
-    @Wrappers.TimeLogger
     def GET(Container: str, *Load: str):
         try:
             dict_ = YAML.PATH(Container)
@@ -78,16 +62,8 @@ class YAML:
             raise YAMLError(e)
 
     @staticmethod
-    @Wrappers.TimeLogger
-    def TOKEN(password: int):
-        password_ = password ** 4
-
-        if password_ == YAML.GET("Variables", "ClientSide", "Password"):
-
-            return YAML.GET("Variables", "ClientSide", "Token")
-
-        else:
-            sys.exit(EnvironmentError("Das Passwort ist Falsch!"))
+    def TOKEN():
+        return YAML.GET("Variables", "ClientSide", "Token")
 
 
 class Messaging:
@@ -414,34 +390,34 @@ async def get_channel(user, embed, name):
 
 class Farbe:
 
-    Dp_Red = 0xc23b22
+    Dp_Red = discord.Colour(0xc23b22)
 
-    Dp_Blue = 0x779ecb
+    Dp_Blue = discord.Colour(0x779ecb)
 
-    Dp_Green = 0xa2d0c0
+    Dp_Green = discord.Colour(0xa2d0c0)
 
-    Lp_Green = 0x78e08f
+    Lp_Green = discord.Colour(0x78e08f)
 
-    Lp_Blue = 0xadd8e6
+    Lp_Blue = discord.Colour(0xadd8e6)
 
-    Lp_Red = 0xff3328
+    Lp_Red = discord.Colour(0xff3328)
 
-    Red = 0xff0000
+    Red = discord.Colour(0xff0000)
 
-    Orange = 0xfd9644
+    Orange = discord.Colour(0xfd9644)
 
-    Darker_Theme = 0x23272a
+    Darker_Theme = discord.Colour(0x23272a)
 
-    ShimariRosa = 0xff00ff
+    ShimariRosa = discord.Colour(0xff00ff)
 
     class ShimariFarben:
 
-        PlaceHolder = 0xff00ff
+        PlaceHolder = discord.Colour(0xff00ff)
 
-        Normal = 0x5e5e5e
+        Normal = discord.Colour(0x5e5e5e)
 
-        Selten = 0xac6ec
+        Selten = discord.Colour(0xac6ec)
 
-        Legendaer = 0xf508e4
+        Legendaer = discord.Colour(0xf508e4)
 
-        Exotisch = 0xf7db6b
+        Exotisch = discord.Colour(0xf7db6b)

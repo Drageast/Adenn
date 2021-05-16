@@ -4,8 +4,8 @@ import random
 import discord
 from discord.ext import commands
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -28,7 +28,7 @@ class Games(commands.Cog):
 
         embed = discord.Embed(
             title='Schere Stein Papier',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description=f'{ctx.author.mention} \nWähle aus ob **Schere** (✌), **Stein** (✊) oder **Papier** (✋).'
         )
         embed.set_thumbnail(url=self.client.user.avatar_url)
@@ -54,10 +54,10 @@ class Games(commands.Cog):
 
             erembed = discord.Embed(
                 title='Schere Stein Papier',
-                colour=discord.Colour(Utils.Farbe.Red),
+                colour=Framework.Farbe.Red,
                 description=f'{ctx.author.mention} hat nicht rechtzeitig reagiert.'
             )
-            return await Utils.Messaging.Universal_edit(m, erembed)
+            return await Framework.Messaging.Universal_edit(m, erembed)
 
         rnum = random.randint(1, 3)
 
@@ -69,12 +69,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gleichstand!',
-                    colour=discord.Colour(Utils.Farbe.Darker_Theme),
+                    colour=Framework.Farbe.Darker_Theme,
                     description=f'Ich hatte **{char}**.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             elif rnum == 2:
 
@@ -82,12 +82,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Verloren!',
-                    colour=discord.Colour(Utils.Farbe.Dp_Red),
+                    colour=Framework.Farbe.Dp_Red,
                     description=f'Ich hatte **{char}** und habe somit gewonnen.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             elif rnum == 3:
 
@@ -95,12 +95,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gewonnen!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Lp_Green,
                     description=f'Ich hatte **{char}** und habe somit verloren.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
 
         elif str(reaction.emoji) == stein:
@@ -111,12 +111,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gewonnen!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Lp_Green,
                     description=f'Ich hatte **{char}** und habe somit verloren.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             elif rnum == 2:
 
@@ -124,12 +124,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gleichstand!',
-                    colour=discord.Colour(Utils.Farbe.Darker_Theme),
+                    colour=Framework.Farbe.Darker_Theme,
                     description=f'Ich hatte **{char}**.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             else:
 
@@ -137,12 +137,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Verloren!',
-                    colour=discord.Colour(Utils.Farbe.Dp_Red),
+                    colour=Framework.Farbe.Dp_Red,
                     description=f'Ich hatte **{char}** und habe somit gewonnen.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
         else:
 
@@ -152,12 +152,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Verloren!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Dp_Red,
                     description=f'Ich hatte **{char}** und habe somit gewonnen.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             elif rnum == 2:
 
@@ -165,12 +165,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gewonnen!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Lp_Green,
                     description=f'Ich hatte **{char}** und habe somit verloren.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
             else:
 
@@ -178,12 +178,12 @@ class Games(commands.Cog):
 
                 embed = discord.Embed(
                     title='Gleichstand!',
-                    colour=discord.Colour(Utils.Farbe.Darker_Theme),
+                    colour=Framework.Farbe.Darker_Theme,
                     description=f'Ich hatte **{char}**.'
                 )
                 embed.set_thumbnail(url=self.client.user.avatar_url)
 
-                await Utils.Messaging.Universal_edit(m, embed)
+                await Framework.Messaging.Universal_edit(m, embed)
 
 
 # Cog Finishing

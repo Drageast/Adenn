@@ -3,9 +3,8 @@ Variables:
   ClientSide:
 
     Prefix: "!"
-    Status: 1
+    Status: 2
     Token: "ODE5OTg1MDc5MzE2NjQzODkz.YEuknQ.PaImie90ORtc7NrnGo08EgNnUCk"
-    Password: 1089241987273767351211078922928096848121064894733338593803676753042657388585319667836993396661693452486370600625
 
     Webhooks:
       System: "https://discordapp.com/api/webhooks/815708355371860069/gy3_edx9paMdTg6f-0WL2qOlWnGKalV_10SPwK3jjdWV3f4dPSbvLStyDmClkAVQBRgu"
@@ -22,7 +21,7 @@ Variables:
       URL: "mongodb+srv://Drageast:Schmidt04@cluster0.r1bgi.mongodb.net/Adenn?retryWrites=true&w=majority"
       Base: "Adenn"
       Connection1: "Ticket"
-      Connection2: "Uccount"
+      Connection2: "Uccounts"
 
   Developer: [431017472083099660, 440136099235364864]
 

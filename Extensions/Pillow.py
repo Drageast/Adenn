@@ -6,8 +6,8 @@ from PIL import Image, ImageDraw, ImageOps, ImageFont
 from colorthief import ColorThief
 from discord.ext import commands
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -38,7 +38,7 @@ class PILLOW(commands.Cog):
 
         user = self.member_check(member, ctx)
 
-        data = await Utils.Uccounts.check_Uccount(self, ctx, ctx.author.id, 2)
+        data = await Framework.Uccounts.check_Uccount(self, ctx, ctx.author.id, 2)
 
         async with ctx.typing():
             # LEVEL_ERMITTLUNG
@@ -84,12 +84,12 @@ class PILLOW(commands.Cog):
 
             output = ImageOps.fit(av, mask.size, centering=(0.5, 0.5))
             output.putalpha(mask)
-            output.save('Utils/Images/output.png')
+            output.save('Framework/Images/output.png')
 
             # TEXT
-            ranking = Image.open('Utils/Images/Ranking_card.jpg')
+            ranking = Image.open('Framework/Images/Ranking_card.jpg')
             draw = ImageDraw.Draw(ranking)
-            font = ImageFont.truetype("Utils/Discord_font.ttf", 85)
+            font = ImageFont.truetype("Framework/Discord_font.ttf", 85)
             draw.text((645, 155), f"| {user.name} | XP: {xp}/{int(200 * ((1 / 2) * lvl))} | Lvl: {lvl} |",
                       color, font=font)
             ranking.paste(av, (45, 45), av)
@@ -100,14 +100,14 @@ class PILLOW(commands.Cog):
             ImageDraw.floodfill(ranking, xy=(166, 616), value=color, thresh=40)
 
             # SAVE
-            ranking.save('Utils/Images/overlap.png')
+            ranking.save('Framework/Images/overlap.png')
 
-            file = discord.File('Utils/Images/overlap.png')
+            file = discord.File('Framework/Images/overlap.png')
 
-        await Utils.Messaging.Universal_send(ctx, file, 14)
+        await Framework.Messaging.Universal_send(ctx, file, 14)
         try:
-            os.remove('Utils/Images/overlap.png')
-            os.remove('Utils/Images/output.png')
+            os.remove('Framework/Images/overlap.png')
+            os.remove('Framework/Images/output.png')
         except:
             pass
 

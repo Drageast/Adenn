@@ -3,8 +3,8 @@ import asyncio
 import discord
 from discord.ext import commands
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -39,10 +39,10 @@ class PERSONAL(commands.Cog):
 
             embed = discord.Embed(
                 title="Fertig!",
-                colour=discord.Colour(Utils.Farbe.Lp_Green),
+                colour=Framework.Farbe.Lp_Green,
                 description=f"Genießt den Persönlichen Bereich `{name}` nun für {Zeit} Stunden."
             )
-        await Utils.Messaging.Universal_send(ctx, embed, 15)
+        await Framework.Messaging.Universal_send(ctx, embed, 15)
 
         Zeit_converted = (((Zeit * 60) * 60) - 30)
         print(Zeit_converted)
@@ -50,7 +50,7 @@ class PERSONAL(commands.Cog):
         await asyncio.sleep(Zeit_converted)
         embed = discord.Embed(
             title="Achtung!",
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description=f"Der Persönliche Bereich `{name}` wird in **30 Sekunden gelöscht**!"
         )
         embed.set_thumbnail(url=self.client.user.avatar_url)

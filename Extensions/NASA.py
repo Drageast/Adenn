@@ -5,8 +5,8 @@ import discord
 import requests
 from discord.ext import commands
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -22,17 +22,17 @@ class NASA(commands.Cog):
 
         embed = discord.Embed(
             title="NASA",
-            colour=discord.Colour(Utils.Farbe.Lp_Blue),
+            colour=Framework.Farbe.Lp_Blue,
             description=f"Dies ist die **NASA Gruppe**.\nGebe: `{self.client.command_prefix}nasa Command` ein.\n Command: - **ap**n"
         )
-        embed.set_thumbnail(url=f'{Utils.YAML.GET("Bilder", "NASA")}')
-        await Utils.Messaging.Universal_send(ctx, embed)
+        embed.set_thumbnail(url=f'{Framework.YAML.GET("Bilder", "NASA")}')
+        await Framework.Messaging.Universal_send(ctx, embed)
 
     # PICTURE_OF_THE_DAY
 
     @NASA.group(aliases=['ap'])
     async def Astr_pic_day(self, ctx):
-        url = f"https://api.nasa.gov/planetary/apod?api_key={str(Utils.YAML.GET('Variables', 'API', 'NASA'))}"
+        url = f"https://api.nasa.gov/planetary/apod?api_key={str(Framework.YAML.GET('Variables', 'API', 'NASA'))}"
 
         data = requests.get(url).json()
 
@@ -49,15 +49,15 @@ class NASA(commands.Cog):
 
         embed = discord.Embed(
             title=f"Astronomic Picture of the Day: {title}",
-            colour=discord.Colour(Utils.Farbe.Lp_Blue),
+            colour=Framework.Farbe.Lp_Blue,
             description=f"{description}\n**URL:** _{pic_url}_",
             timestamp=datum
         )
-        embed.set_thumbnail(url=f'{Utils.YAML.GET("Bilder", "NASA")}')
+        embed.set_thumbnail(url=f'{Framework.YAML.GET("Bilder", "NASA")}')
         embed.set_image(url=f"{pic_url}")
         embed.set_footer(text=f"Copyright: {copy_right} | ")
 
-        await Utils.Messaging.Universal_send(ctx, embed, 30)
+        await Framework.Messaging.Universal_send(ctx, embed, 30)
 
 
 # Cog Finishing

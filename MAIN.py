@@ -1,5 +1,5 @@
 __author__ = "Luca Michael Schmidt"
-__version__ = "4.01"
+__version__ = "4.25"
 
 
 # Import
@@ -9,23 +9,22 @@ from discord.ext import commands
 from pymongo import MongoClient
 
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Client Setup
 intents = discord.Intents.all()
 intents.members = True
-client = commands.AutoShardedBot(command_prefix=Utils.YAML.GET("Variables", "ClientSide", "Prefix"), intents=intents, case_insensitive=True)
+client = commands.AutoShardedBot(command_prefix=Framework.YAML.GET("Variables", "ClientSide", "Prefix"), intents=intents, case_insensitive=True)
 
 
 # MongoDB Initialisierung
 
 @client.listen()
-@Utils.Wrappers.TimeLogger
 async def on_ready():
 
-    State = Utils.YAML.GET("Variables", "ClientSide", "Status")
+    State = Framework.YAML.GET("Variables", "ClientSide", "Status")
     choice = "ONLINE" if State == 1 else "WARTUNG"
     choicemessage = "Das ist der Weg!" if State == 1 else "Maintenance Mode"
     choicestatus = discord.Status.online if State == 1 else discord.Status.do_not_disturb
@@ -38,16 +37,16 @@ async def on_ready():
         pass
     print(f"\nState: |{choice}| ; Logged in as: |{client.user}| ; Latency: |{client.latency}|\n")
 
-    Base = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Base")
-    Con1 = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Connection1")
-    Con2 = Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "Connection2")
+    Base = Framework.YAML.GET("Variables", "ClientSide", "MongoDB", "Base")
+    Con1 = Framework.YAML.GET("Variables", "ClientSide", "MongoDB", "Connection1")
+    Con2 = Framework.YAML.GET("Variables", "ClientSide", "MongoDB", "Connection2")
 
-    client.mongo = MongoClient(Utils.YAML.GET("Variables", "ClientSide", "MongoDB", "URL"))
+    client.mongo = MongoClient(Framework.YAML.GET("Variables", "ClientSide", "MongoDB", "URL"))
     client.ticket = client.mongo[Base][Con1]
     client.Uccount = client.mongo[Base][Con2]
 
 
-    print(f"\nDatabase State: |{choice}| ; Latency: |{Utils.Checker.LATENCY(client)}|\n")
+    print(f"\nDatabase State: |{choice}| ; Latency: |{Framework.Mongo.Uccount(client).latency()}|\n")
 
 
 # Cog - Initialisierung
@@ -55,8 +54,8 @@ async def on_ready():
 
 async def initialize():
 
-    await Utils.Shimari.YAMLShi.Update("config.yaml")
-    await Utils.Shimari.YAMLShi.Update("ShimariData.yaml")
+    await Framework.Shimari.YAMLShi.Update("config.yaml")
+    await Framework.Shimari.YAMLShi.Update("ShimariData.yaml")
 
     print(f"\nSuccess -|REQUEST| ; Pulled from: |GitHub - Drageast|\n")
 
@@ -84,4 +83,4 @@ async def initialize():
 # Token / RUN
 
 
-client.run(Utils.YAML.TOKEN(5744881745535351510568150315))
+client.run(Framework.YAML.TOKEN())

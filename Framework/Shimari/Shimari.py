@@ -1,7 +1,7 @@
-from Utils.Utilities import Wrappers, Farbe, Messaging
-from Utils.Utilities import YAML as UtilYaml
-from Utils.ErrorHandler import YAMLError
-from Utils.MongoDataBase import Uccounts
+from Framework.Utilities import Farbe, Messaging
+from Framework.Utilities import YAML as UtilYaml
+from Framework.Mongo import Uccount
+from Framework.ErrorHandler import YAMLError
 import yaml
 import discord
 from discord.ext import commands
@@ -18,10 +18,9 @@ class Object(object):
 class YAML:
 
     @staticmethod
-    @Wrappers.TimeLogger
     def PATH(container: str):
         try:
-            with open("Utils/Shimari/config.yaml", "r") as f:
+            with open("Framework/Shimari/config.yaml", "r") as f:
                 container_ = yaml.safe_load(f)
             container_ = container_[container]
             return container_
@@ -29,7 +28,6 @@ class YAML:
             raise YAMLError(e)
 
     @staticmethod
-    @Wrappers.TimeLogger
     def GET(Container: str, *Load: str or int):
         try:
             dict_ = YAML.PATH(Container)
@@ -42,10 +40,9 @@ class YAML:
             raise YAMLError(e)
 
     @staticmethod
-    @Wrappers.TimeLogger
     def UNPACK(ID):
         try:
-            with open("Utils/Shimari/ShimariData.yaml", "r") as f:
+            with open("Framework/Shimari/ShimariData.yaml", "r") as f:
                 container = yaml.safe_load(f)
         except Exception as e:
             raise YAMLError(e)
@@ -80,16 +77,15 @@ class YAML:
 
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def Update(filename: str):
-        if not os.path.exists(f"Utils/Shimari/{filename}") and filename in ["config.yaml", "ShimariData.yaml"]:
-            with open(f"Utils/Shimari/{filename}", "w") as f:
+        if not os.path.exists(f"Framework/Shimari/{filename}") and filename in ["config.yaml", "ShimariData.yaml"]:
+            with open(f"Framework/Shimari/{filename}", "w") as f:
                 f.write("")
 
         if filename == "config.yaml":
             data = requests.get(UtilYaml.GET("Variables", "ClientSide", "GitHub", "Balancing"))
 
-            with open(f"Utils/Shimari/{filename}", "wb") as f:
+            with open(f"Framework/Shimari/{filename}", "wb") as f:
                 f.write(data.content)
             return
 
@@ -97,14 +93,12 @@ class YAML:
 
             data = requests.get(UtilYaml.GET("Variables", "ClientSide", "GitHub", "ShimariData"))
 
-            with open(f"Utils/Shimari/{filename}", "wb") as f:
+            with open(f"Framework/Shimari/{filename}", "wb") as f:
                 f.write(data.content)
             return
 
 
 class ShimariBASE:
-
-    @Wrappers.TimeLogger
     def __init__(self, ID: int):
         self.Data = YAML.UNPACK(ID)
         self.ID = ID
@@ -183,36 +177,28 @@ class ShimariBASE:
 
         self.Mana += int(rnum + bonus)
 
-    @Wrappers.TimeLogger
     def update_Stats(self):
-        print(self.Health, self.Data.Leben)
         if self.Health == self.Data.Leben:
             if self.Rarity == 1:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 1)[0])))
                 self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 1)[1])))
-                print("Stufe 1")
                 return
             elif self.Rarity == 2:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 2)[0])))
                 self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 2)[1])))
-                print("Stufe 2")
                 return
             elif self.Rarity == 3:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 3)[0])))
                 self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 3)[1])))
-                print("Stufe 3")
                 return
             elif self.Rarity == 4:
                 self.Health = (int(self.Data.Leben + int(YAML.GET("Update_Stats", 4)[0])))
                 self.Mana = (int(self.Data.Mana + int(YAML.GET("Update_Stats", 4)[1])))
-                print("Stufe 4")
                 return
 
         else:
-            print("ELSE")
             return
 
-    @Wrappers.TimeLogger
     def tuple_Shimari(self):
         x = (self.ID, self.Rarity)
         return x
@@ -222,7 +208,6 @@ class Shimari(ShimariBASE):
 
 
     @staticmethod
-    @Wrappers.TimeLogger
     def fight(Shimari1: ShimariBASE, Shimari2: ShimariBASE, Attack: int):
         Chance = random.randint(1, 10)
         if Shimari2["Operator"] == "AI":
@@ -256,7 +241,6 @@ class Shimari(ShimariBASE):
 class DiscordShimari:
 
     @staticmethod
-    @Wrappers.TimeLogger
     def GET_randomShimari():
         shimari = random.choice(YAML.UNPACK("List"))
 
@@ -273,7 +257,6 @@ class DiscordShimari:
         return tpl
 
     @staticmethod
-    @Wrappers.TimeLogger
     def list_control(name=None):
         Name = name if name else None
         if Name:
@@ -299,7 +282,6 @@ class DiscordShimari:
         return shimaris
 
     @staticmethod
-    @Wrappers.TimeLogger
     def Create_Shimari(Shimari_: tuple):
         ID, Rarity = Shimari_
 
@@ -311,14 +293,13 @@ class DiscordShimari:
         return x
 
     @staticmethod
-    @Wrappers.TimeLogger
     def CALCULATE_Attack(Shimari_: ShimariBASE):
         S = Shimari_
 
         if S.Mana >= (S.Cost[2]):
             return 3
 
-        elif S.Mana >= (S.Cost[1] ):
+        elif S.Mana >= (S.Cost[1]):
             return 2
 
         elif S.Mana >= (S.Cost[0]):
@@ -330,6 +311,7 @@ class DiscordShimari:
 
     @staticmethod
     async def ShimariShop(self, ctx, content: list, shimari_list: list, info: str = None):
+        Ucc = Uccount(self.client)
 
         contents = content
 
@@ -422,8 +404,8 @@ class DiscordShimari:
                     )
                     embed.set_image(url=Shimari_.avatar())
 
-                    await Uccounts.update_Shimari(self, ctx, ctx.author.id, shimari_list[cur_page], "-")
-                    await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "+", DiscordShimari.Create_Shimari(shimari_list[cur_page]).price())
+                    Ucc.refactor(user, shimari_list[cur_page], ["Shimari", "List"], {"Type": "Shimari", "Attributes": "-", "Timestamp": False})
+                    Ucc.refactor(user, DiscordShimari.Create_Shimari(shimari_list[cur_page]).price(), ["Currency", "Balance"], {"Type": "balance", "Attributes": "+", "Timestamp": False})
                     await Messaging.Universal_edit(message, embed)
                     break
 
@@ -449,7 +431,6 @@ class DiscordShimari:
                 break
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def Choosing(self, channel: discord.TextChannel, User: discord.Member, content: list, shimari_list: list):
 
         contents = content
@@ -497,12 +478,10 @@ class DiscordShimari:
 
 
     @staticmethod
-    @Wrappers.TimeLogger
     def failure_chance():
         rnum = random.randint(1, 100)
         rnum2 = random.randint(1, 2)
 
         if rnum < YAML.GET("Failure_Rate", "Buttons"):
-            print("Failure")
             return rnum2
         return 0

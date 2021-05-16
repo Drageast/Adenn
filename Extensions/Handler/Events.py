@@ -6,8 +6,8 @@ import discord
 from discord.ext import commands
 
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -17,57 +17,48 @@ class EVENT(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.Uccount = Framework.Uccount(client)
 
     # MEMBER JOIN
 
     @commands.Cog.listener()
-    @Utils.Wrappers.TimeLogger
     async def on_member_join(self, user: discord.Member):
 
         embed = discord.Embed(
             title='**Willkommen!**',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description=f'{user.mention} willkommen auf dem Discord Server: **{user.guild.name}**'
         )
         embed.set_thumbnail(url=user.avatar_url)
         embed.add_field(name='Mitgliederzahl:', value=f'{user.guild.member_count}')
 
-        await Utils.get_channel(user, embed, 'willkommen')
+        await Framework.get_channel(user, embed, 'willkommen')
 
     # MEMBER REMOVE
 
     @commands.Cog.listener()
-    @Utils.Wrappers.TimeLogger
     async def on_member_remove(self, user: discord.Member):
 
         embed = discord.Embed(
             title='**Bye!**',
-            colour=discord.Colour(Utils.Farbe.Dp_Red),
+            colour=Framework.Farbe.Dp_Red,
             description=f'Es war nett dich gekannt zu haben, {user.mention}!'
         )
         embed.set_thumbnail(url=user.avatar_url)
         embed.add_field(name='Mitgliederzahl:', value=f'{user.guild.member_count}')
 
-        await Utils.get_channel(user, embed, 'willkommen')
+        await Framework.get_channel(user, embed, 'willkommen')
 
-        try:
-
-            Uid = f"{user.id}:{user.guild.id}"
-
-            self.client.Uccount.delete_one({"_id": Uid})
-
-        except commands.CommandError:
-            pass
+        self.Uccount.delete(user)
 
     # CLIENT JOIN
 
     @commands.Cog.listener()
-    @Utils.Wrappers.TimeLogger
     async def on_guild_join(self, guild):
 
         embed = discord.Embed(
             title='Hallo!',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=discord.Colour(Framework.Farbe.Red),
             description='Hallo! Danke dass ihr mich hinzugefügt habt.\nDies sind die ersten Befehle, um anzufangen.'
         )
         embed.add_field(name='**!h**', value='Zeigt dir die Commands.')
@@ -81,7 +72,6 @@ class EVENT(commands.Cog):
 
 
     @commands.Cog.listener()
-    @Utils.Wrappers.TimeLogger
     async def on_message(self, message):
 
         if not message.guild:
@@ -90,14 +80,8 @@ class EVENT(commands.Cog):
         elif message.author.bot:
             return
 
-        data = await Utils.Uccounts.check_Uccount(self, message, message.author.id, 3)
-        new_verl = data.verlauf + 1
-
-        await Utils.Uccounts.update_Uccount(self, message, message.author.id, "Main", "Verlauf", int(new_verl))
-
         if message.content.startswith('!'):
             return
-
 
         elif message.content in [f'<@!{self.client.user.id}>', f'<@{self.client.user.id}>']:
             m = await message.channel.send(
@@ -109,16 +93,15 @@ class EVENT(commands.Cog):
 
         else:
 
-            epoch = datetime.datetime.utcfromtimestamp(0)
+            data = self.Uccount.get(message.author, {"Get": {"Type": "CLASS", "Return": "LEVELING", "Timediff": True}})
 
-            data = await Utils.Uccounts.check_Uccount(self, message, message.author.id, 2)
+            if data.Timestamp <= random.randint(-120, -1):
 
-            if data.diff >= random.randint(1, 120):
+                self.Uccount.refactor(message.author, 5, ["Leveling", "Xp"], {"Type": "leveling", "Attributes": "+", "Timestamp": True})
 
-                xp = data.xp + 5
+                data.Xp += 5
 
-                await Utils.Uccounts.update_Uccount(self, message, message.author.id, "Leveling", "Xp", xp)
-                await Utils.Uccounts.update_Uccount(self, message, message.author.id, "Leveling", "Timestamp", (datetime.datetime.utcnow() - epoch).total_seconds())
+                xp = data.Xp
 
                 lvl = 0
                 while True:
@@ -130,7 +113,7 @@ class EVENT(commands.Cog):
                 if xp == 0:
                     embed = discord.Embed(
                         title="Level Up!",
-                        colour=discord.Colour(Utils.Farbe.Red),
+                        colour=Framework.Farbe.Red,
                         description=f"{message.author.mention} Glückwunsch! Du bist einen Level aufgestiegen! Du bist nun Level: **{lvl}**"
                     )
                     m = await message.channel.send(embed=embed)

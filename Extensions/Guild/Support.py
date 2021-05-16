@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 
 
-# Utils
-import Utils
+# Framework
+import Framework
 
 
 # Cog Initialising
@@ -36,17 +36,17 @@ class SUPPORT(commands.Cog):
         # ANKÜNDIGUNG
         embed = discord.Embed(
             title='>**Support**<',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description=f'{ctx.author.mention}, schaue in deine **Privaten** Nachrichten.'
         )
         embed.set_thumbnail(url=self.client.user.avatar_url)
 
-        await Utils.Messaging.Universal_send(ctx, embed, 4)
+        await Framework.Messaging.Universal_send(ctx, embed, 4)
 
         # PRIVAT START
         embed = discord.Embed(
             title='>**Support**<',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description='Hallo! Ich bin hier, um dir bei deinem Problem zu helfen.'
                         '\nBevor du mir dein Problem schilderst, gebe erstmal eine Stufe der Wichtigkeit an.'
                         '\n`1`: Vorschläge,'
@@ -84,7 +84,7 @@ class SUPPORT(commands.Cog):
 
         embed = discord.Embed(
             title='>**Support**<',
-            colour=discord.Colour(Utils.Farbe.Red),
+            colour=Framework.Farbe.Red,
             description=f'Danke für deine Angabe. Dein Ticket wird unter dem Label:\n`{Stufe}`\nversendet.'
                         '\nGebe bitte nun den Fehlerbericht ein, dieser sollte mind. 25 Zeichen enthalten.'
                         '\nWenn du jedoch den Vorgang abbrechen möchtest, gebe nichts ein.'
@@ -108,7 +108,7 @@ class SUPPORT(commands.Cog):
         else:
             embed = discord.Embed(
                 title='>**Support**<',
-                colour=discord.Colour(Utils.Farbe.Red),
+                colour=Framework.Farbe.Red,
                 description=f'Danke für deine Angabe.'
                             f'\nDu wirst demnächst eine Nachricht des Development-Teams erhalten.\n'
                             f'Dein Ticket:```{Ticket}```'
@@ -130,14 +130,14 @@ class SUPPORT(commands.Cog):
 
             embed = discord.Embed(
                 title=f'Support Anfrage von: **{ctx.author}**',
-                colour=discord.Colour(Utils.Farbe.Dp_Green),
+                colour=Framework.Farbe.Dp_Green,
                 description=f'```fix\nStufe: {Stufe}\n```\n```\nNachricht: {m2.content}\n```'
             )
             embed.add_field(name='**Antworten:**', value=f'`{self.client.command_prefix}a Ticket Nachricht`')
             embed.add_field(name='**TICKET:**', value=f'`{Ticket}`')
 
-            user1 = await self.client.fetch_user(Utils.YAML.GET("Variables", "Developer")[0])
-            user2 = await self.client.fetch_user(Utils.YAML.GET("Variables", "Developer")[1])
+            user1 = await self.client.fetch_user(Framework.YAML.GET("Variables", "Developer")[0])
+            user2 = await self.client.fetch_user(Framework.YAML.GET("Variables", "Developer")[1])
 
             await user1.send(embed=embed)
             await user2.send(embed=embed)
@@ -149,8 +149,8 @@ class SUPPORT(commands.Cog):
     @commands.dm_only()
     async def antwort(self, ctx, Ticket, *, n):
 
-        User2 = await self.client.fetch_user(Utils.YAML.GET("Variables", "Developer")[0])
-        User3 = await self.client.fetch_user(Utils.YAML.GET("Variables", "Developer")[1])
+        User2 = await self.client.fetch_user(Framework.YAML.GET("Variables", "Developer")[0])
+        User3 = await self.client.fetch_user(Framework.YAML.GET("Variables", "Developer")[1])
 
         _Ticket = self.client.ticket.find_one({"_id": Ticket})
 
@@ -162,7 +162,7 @@ class SUPPORT(commands.Cog):
             if ctx.author == User2:
                 embed = discord.Embed(
                     title=f'{User2.name} hat das Ticket: `{Ticket}` bearbeitet!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Lp_Green,
                     description=f'Antwort:```fix\n{n}\n```'
                 )
                 await User3.send(embed=embed)
@@ -170,7 +170,7 @@ class SUPPORT(commands.Cog):
             elif ctx.author == User3:
                 embed = discord.Embed(
                     title=f'{User3.name} hat das Ticket: `{Ticket}` bearbeitet!',
-                    colour=discord.Colour(Utils.Farbe.Lp_Green),
+                    colour=Framework.Farbe.Lp_Green,
                     description=f'Antwort:```fix\n{n}\n```'
                 )
                 await User2.send(embed=embed)
@@ -185,7 +185,7 @@ class SUPPORT(commands.Cog):
 
             embed = discord.Embed(
                 title='>**Support**<',
-                colour=discord.Colour(Utils.Farbe.Red),
+                colour=Framework.Farbe.Red,
                 description=f'Du hast eine Antwort des **Support Teams** erhalten!\n```\n- Dein Ticket: {Ticket}, {Stufe}, {Nachricht}\n```'
                             f'```diff\n- Antwort: {n}```'
             )
@@ -195,7 +195,7 @@ class SUPPORT(commands.Cog):
 
             embed = discord.Embed(
                 title=f'Du hast eine Antwort versendet!',
-                colour=discord.Colour(Utils.Farbe.Dp_Green),
+                colour=Framework.Farbe.Dp_Green,
                 description=f'Antwort:```fix\n{n}\n```'
             )
             await ctx.author.send(embed=embed)

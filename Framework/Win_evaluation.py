@@ -2,10 +2,8 @@
 import random
 from random import shuffle
 import discord
-from .MongoDataBase import Uccounts
-
-# Util
-from .Utilities import Farbe, Messaging, Wrappers
+from .Utilities import Farbe, Messaging
+from .Mongo import Uccount
 
 
 # Lokale_Variablen
@@ -25,7 +23,6 @@ chars = ["'", ","]
 class BlackJack_Duell:
 
     @staticmethod
-    @Wrappers.TimeLogger
     def Deck():
         deck = []
         for suit in (random.choice([herz, karo, pik, kreuz])):
@@ -36,7 +33,6 @@ class BlackJack_Duell:
             return deck
 
     @staticmethod
-    @Wrappers.TimeLogger
     def pointCount(myCards):
         myCount = 0
         aceCount = 0
@@ -60,7 +56,6 @@ class BlackJack_Duell:
         return myCount
 
     @staticmethod
-    @Wrappers.TimeLogger
     def createPlayinghands(myDeck):
         player1Hand = []
         player2Hand = []
@@ -74,7 +69,6 @@ class BlackJack_Duell:
         return [player1Hand, player2Hand]
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def win_evaluation(pl1, pl2, Embed_pl1, Embed_pl2, pl1P, pl2P, cred: int):
 
         for p in chars:
@@ -82,7 +76,7 @@ class BlackJack_Duell:
             if BlackJack_Duell.pointCount(pl1P) == 21 == BlackJack_Duell.pointCount(pl2P):
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"Ihr habt einen Blackjack!\nIhr habt alles erstattet bekommen!"
                 )
                 pl1E.add_field(name=f'**{pl2.name}`s Hand:**',
@@ -100,7 +94,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"Du hast einen Blackjack!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl2.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -110,7 +104,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"{pl1.name} hat einen Blackjack!\n{pl1.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -126,7 +120,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"Du hast einen Blackjack!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl1.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -136,7 +130,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"{pl2.name} hat einen Blackjack!\n{pl2.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -151,7 +145,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(pl2P) > 21 and BlackJack_Duell.pointCount(pl1P) > 21:
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{pl1.name} und {pl2.name} ihr habt beide über 21.\n**Ihr habt somit verloren!**\nEuch wurden **{cred}**₹ entzogen!'
                 )
                 embed.add_field(name=f'**{pl1.name}`s Hand:**',
@@ -167,7 +161,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"{pl2.name} hat mehr als 21!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl2.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -177,7 +171,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"Du hast mehr als 21!\n{pl1.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -193,7 +187,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"{pl1.name} hat mehr als 21!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl1.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -203,7 +197,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"Du hast mehr als 21!\n{pl2.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -220,7 +214,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"Du hast mehr als {pl1.name}!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl1.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -230,7 +224,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"Du hast weniger als {pl2.name}!\n{pl2.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -246,7 +240,7 @@ class BlackJack_Duell:
 
                 pl1E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f"Du hast mehr als {pl2.name}!\nDir wurden **{int(cred) * 2}**₹ überwiesen und {pl2.name} wurden **{cred}**₹ entzogen!"
                 )
                 pl1E.add_field(name=f'**Deine Hand:**',
@@ -256,7 +250,7 @@ class BlackJack_Duell:
 
                 pl2E = discord.Embed(
                     title="-BLACK-JACK-",
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f"Du hast weniger als {pl1.name}!\n{pl1.name} wurden **{int(cred) * 2}**₹ überwiesen und dir wurden **{cred}**₹ entzogen!"
                 )
                 pl2E.add_field(name=f'**Deine Hand:**',
@@ -272,7 +266,7 @@ class BlackJack_Duell:
 
                 embed = discord.Embed(
                     title='Fehler!',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description='Ein Fehler in der Funktion: `wind_evaluation` ist aufgetreten!'
                 )
 
@@ -281,14 +275,13 @@ class BlackJack_Duell:
                 return 2, 2
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def win_condition(player1, player2, player1_E, player2_E, name_player1, name_player2):
         for p in chars:
 
             if BlackJack_Duell.pointCount(player2) == 21:
                 embed = discord.Embed(
                     title='!!BLACKJACK!!',
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f'{name_player2} hat einen BLACKJACK!\n**{name_player2} hat somit Gewonnen!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -303,7 +296,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player1) == 21:
                 embed = discord.Embed(
                     title='!!BLACKJACK!!',
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f'{name_player1} hat einen BLACKJACK!\n**{name_player1} hat somit Gewonnen!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -318,7 +311,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player2) > 21 and BlackJack_Duell.pointCount(player1) > 21:
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{name_player1} und {name_player2} ihr habt beide über 21.\n**Ihr habt somit verloren!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -333,7 +326,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player2) > 21 > BlackJack_Duell.pointCount(player1):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{name_player2} hat mehr als 21!\n**{name_player2}hat somit Verloren!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -348,7 +341,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player1) > 21 > BlackJack_Duell.pointCount(player2):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{name_player1} hat mehr als 21!\n**{name_player1}hat somit Verloren!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -363,7 +356,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player2) > BlackJack_Duell.pointCount(player1):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{name_player2} hat mehr als {name_player1}.\n**{name_player2} hat somit gewonnen!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -378,7 +371,7 @@ class BlackJack_Duell:
             elif BlackJack_Duell.pointCount(player1) > BlackJack_Duell.pointCount(player2):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'{name_player1} hat mehr als {name_player2}.\n**{name_player1} hat somit gewonnen!**'
                 )
                 embed.add_field(name=f'**{name_player1} Hand:**',
@@ -394,7 +387,7 @@ class BlackJack_Duell:
 
                 embed = discord.Embed(
                     title='Fehler!',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description='Ein Fehler bei: **win_condition** ist aufgetreten'
                 )
 
@@ -403,11 +396,9 @@ class BlackJack_Duell:
                 return
 
 
-# noinspection PyTypeChecker
 class BlackJack_Bot:
 
     @staticmethod
-    @Wrappers.TimeLogger
     def Deck():
         deck = []
         for suit in (random.choice([herz, karo, pik, kreuz])):
@@ -418,7 +409,6 @@ class BlackJack_Bot:
             return deck
 
     @staticmethod
-    @Wrappers.TimeLogger
     def pointCount(myCards):
         myCount = 0
         aceCount = 0
@@ -442,7 +432,6 @@ class BlackJack_Bot:
         return myCount
 
     @staticmethod
-    @Wrappers.TimeLogger
     def createPlayinghands(myDeck):
         dealerHand = []
         playerHand = []
@@ -463,8 +452,8 @@ class BlackJack_Bot:
         return [dealerHand, playerHand]
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def win_evaluation_bot(self, ctx, dealer, player, m, avatar, cred: int):
+        Ucc = Uccount(self.client)
 
         chars = ["'", ","]
 
@@ -473,7 +462,7 @@ class BlackJack_Bot:
             if BlackJack_Bot.pointCount(dealer) == 21:
                 embed = discord.Embed(
                     title='!!BLACKJACK!!',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'Der Dealer hat einen BLACKJACK!\nDir wurden: **{cred}**₹ entzogen!'
                 )
                 embed.set_thumbnail(url=avatar)
@@ -482,13 +471,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "-"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) == 21:
                 embed = discord.Embed(
                     title='!!BLACKJACK!!',
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f'Du hast einen BLACKJACK!\nDir wurden: **{int(cred) * 2}**₹ überwiesen!'
                 )
                 embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -497,13 +486,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "*"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(dealer) > 21 and BlackJack_Bot.pointCount(player) > 21:
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'Ihr habt beide über 21.\nDir wurden deine Credits wieder erstattet.'
                 )
                 embed.set_thumbnail(url=avatar)
@@ -517,7 +506,7 @@ class BlackJack_Bot:
             elif BlackJack_Bot.pointCount(dealer) > 21 > BlackJack_Bot.pointCount(player):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f'Der Dealer hat mehr als 21!\nDir wurden: **{int(cred) * 2}**₹ überwiesen!'
                 )
                 embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -526,13 +515,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "*"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) > 21 > BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'Du hast mehr als 21!\nDir wurden: **{cred}**₹ entzogen!'
                 )
                 embed.set_thumbnail(url=avatar)
@@ -541,13 +530,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "-"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(dealer) > BlackJack_Bot.pointCount(player):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Dp_Red),
+                    colour=Farbe.Dp_Red,
                     description=f'Der Dealer hat mehr als du!\nDir wurden: **{cred}**₹ entzogen!'
                 )
                 embed.set_thumbnail(url=avatar)
@@ -556,13 +545,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "-"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) > BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Lp_Green),
+                    colour=Farbe.Lp_Green,
                     description=f'Du hast mehr als der Dealer!\nDir wurden: **{int(cred) * 2}**₹ überwiesen!'
                 )
                 embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -571,13 +560,13 @@ class BlackJack_Bot:
                 embed.add_field(name=f'**Dealer Hand:**',
                                 value=f'{str(dealer).replace(p, " ")}\n\nGezählt:\n{str(BlackJack_Bot.pointCount(dealer))}')
 
-                await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "*", cred)
+                Ucc.refactor(ctx.author, cred, ["Currency", "Balance"], {"Type": "balance", "Attributes": "*"})
                 return await Messaging.Universal_edit(m, embed)
 
             elif BlackJack_Bot.pointCount(player) == BlackJack_Bot.pointCount(dealer):
                 embed = discord.Embed(
                     title='-BLACKJACK-',
-                    colour=discord.Colour(Farbe.Darker_Theme),
+                    colour=Farbe.Darker_Theme,
                     description=f'Ihr habt beide gleich viel!\nDir wurden deine Credits wieder erstattet.'
                 )
                 embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -592,7 +581,7 @@ class BlackJack_Bot:
 
                 embed = discord.Embed(
                     title='Fehler!',
-                    colour=discord.Colour(Farbe.Orange),
+                    colour=Farbe.Orange,
                     description='Ein Fehler ist in der Funktion **win_evaluation_bot** aufgetreten!\nDir wurden deine Credits wieder erstattet.'
                 )
                 embed.add_field(name=f'**Deine Hand: Hand:**',
@@ -607,46 +596,46 @@ class BlackJack_Bot:
 class SlotMachine:
 
     @staticmethod
-    @Wrappers.TimeLogger
     async def win_evaluation_slot(self, ctx, Wheel1, Wheel2, Wheel3, m):
+        Ucc = Uccount(self.client)
 
         if Wheel1 == Wheel2 == Wheel3:
             embed = discord.Embed(
                 title="-SLOT-MASCHINE-",
-                colour=discord.Colour(Farbe.Red),
+                colour=Farbe.Red,
                 description=f"Du hast **1000**₹ gewonnen, da du den Jackpot hast!"
             )
             embed.add_field(name="1️⃣", value=f"{Wheel1}")
             embed.add_field(name="2️⃣", value=f"{Wheel2}")
             embed.add_field(name="3️⃣", value=f"{Wheel3}")
 
-            await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "+", 1000)
+            Ucc.refactor(ctx.author, 1000, ["Currency", "Balance"], {"Type": "balance", "Attributes": "+"})
             return embed
 
         elif Wheel1 == Wheel2 or Wheel1 == Wheel3 or Wheel2 == Wheel3:
 
             embed = discord.Embed(
                 title="-SLOT-MASCHINE-",
-                colour=discord.Colour(Farbe.Red),
+                colour=Farbe.Red,
                 description=f"Du hast **100**₹ gewonnen, da du 2 identische Symbole hast!"
             )
             embed.add_field(name="1️⃣", value=f"{Wheel1}")
             embed.add_field(name="2️⃣", value=f"{Wheel2}")
             embed.add_field(name="3️⃣", value=f"{Wheel3}")
 
-            await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "+", 100)
+            Ucc.refactor(ctx.author, 100, ["Currency", "Balance"], {"Type": "balance", "Attributes": "+"})
             return embed
 
         else:
 
             embed = discord.Embed(
                 title="-SLOT-MASCHINE-",
-                colour=discord.Colour(Farbe.Red),
+                colour=Farbe.Red,
                 description=f"Du hast **100**₹ verloren, da du nichts gleich hast!"
             )
             embed.add_field(name="1️⃣", value=f"{Wheel1}")
             embed.add_field(name="2️⃣", value=f"{Wheel2}")
             embed.add_field(name="3️⃣", value=f"{Wheel3}")
 
-            await Uccounts.currencyUp_Uccount(self, ctx, ctx.author.id, "-", 100)
+            Ucc.refactor(ctx.author, 100, ["Currency", "Balance"], {"Type": "balance", "Attributes": "-"})
             return embed
