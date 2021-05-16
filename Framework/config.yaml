@@ -3,7 +3,7 @@ Variables:
   ClientSide:
 
     Prefix: "!"
-    Status: 2
+    Status: 1
     Token: "ODE5OTg1MDc5MzE2NjQzODkz.YEuknQ.PaImie90ORtc7NrnGo08EgNnUCk"
 
     Webhooks:
