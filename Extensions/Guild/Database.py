@@ -83,7 +83,7 @@ class DB(commands.Cog):
             colour=Framework.Farbe.Lp_Blue,
         )
         embed.set_author(name="Credit Bank", icon_url=Framework.YAML.GET("Bilder", "Credits"))
-        embed.set_thumbnail(url=user.avatar_url)
+        embed.set_thumbnail(url=User.avatar_url)
         embed.add_field(name="Credits:", value=f"**{data.Balance}**₹")
 
         await Framework.Messaging.Universal_send(ctx, embed, 15)
