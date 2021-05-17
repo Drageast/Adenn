@@ -42,10 +42,12 @@ class DB(commands.Cog):
     @db.command()
     async def bsp(self, ctx):
         embed = discord.Embed(
-            title="",
-            colour=Framework.Farbe.Darker_Theme
+            title="Beispiel",
+            colour=Framework.Farbe.Darker_Theme,
+            description=f"`_id` ist die verschlüsselte Nutzer-ID, als Unterkategorie des Nutzers die verschlüsselte Server-ID mit den Nötigen Informationen"
+                        f" zu Xp, Credits, Zeitstempel und Shimaris."
         )
-        embed.set_thumbnail(url=Framework.YAML.GET("Bilder", "Database"))
+        embed.set_image(url=Framework.YAML.GET("Bilder", "Database"))
 
         await Framework.Messaging.Universal_send(ctx, embed, 15)
 
