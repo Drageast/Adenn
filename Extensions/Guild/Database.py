@@ -33,10 +33,21 @@ class DB(commands.Cog):
                         f"\nEs werden keine Personen bezogene Daten gesammelt, was bedeutet, dass wir keinen Username oder sonstiges speichern, womit "
                         f"ein dritter dich in Verbindung bringt. Wir speichern nur deine Credits, Shimaris und Chat XP. Um dies zu bewerkstelligen, müssen wir dich allerdings "
                         f"über eine ID in der Datenbank identifizieren, aufgrund neuer Datenschutz Regeln von Discord, geschieht dies nun über den Hash Algorithmus [sha](https://de.wikipedia.org/wiki/Secure_Hash_Algorithm). "
-                        f"Wir nehmen deine User ID, Hashen diese mit sha, damit keiner etwas damit anfangen kann und nutzen dies, um dich in der Datenbank zu identifizieren, worauf nur der Bot Zugriff hat."
+                        f"Wir nehmen deine User ID, Hashen diese mit sha, damit keiner etwas damit anfangen kann und nutzen dies, um dich in der Datenbank zu identifizieren, worauf nur der Bot Zugriff hat. "
+                        f"\nFür in Beispiel, gebe: `!db bsp` ein."
         )
 
         await Framework.Messaging.Universal_send(ctx, embed, 120)
+
+    @db.command()
+    async def bsp(self, ctx):
+        embed = discord.Embed(
+            title="",
+            colour=Framework.Farbe.Darker_Theme
+        )
+        embed.set_thumbnail(url=Framework.YAML.GET("Bilder", "Database"))
+
+        await Framework.Messaging.Universal_send(ctx, embed, 15)
 
     @db.group()
     async def debug(self, ctx):
