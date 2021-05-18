@@ -17,6 +17,7 @@ class PILLOW(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.Uccount = Framework.Uccount(client)
 
 
     # RANK
@@ -38,14 +39,13 @@ class PILLOW(commands.Cog):
 
         user = self.member_check(member, ctx)
 
-        data = await Framework.Uccounts.check_Uccount(self, ctx, ctx.author.id, 2)
+        data = self.Uccount.get(user, {"Get": {"Return": "LEVELING", "Type": "CLASS", "Timediff": False}})
 
         async with ctx.typing():
             # LEVEL_ERMITTLUNG
 
             lvl = 0
-            rank = 0
-            xp = data.xp
+            xp = data.Xp
             while True:
                 if xp < ((5 * (lvl ** 2)) + (5 * (lvl - 1))):
                     break
