@@ -2,33 +2,33 @@ Variables:
 
   ClientSide:
 
-    Prefix: "!"
+    Prefix: ""
     Status: 1
-    Token: "ODE5OTg1MDc5MzE2NjQzODkz.YEuknQ.PaImie90ORtc7NrnGo08EgNnUCk"
+    Token: ""
 
     Webhooks:
-      System: "https://discordapp.com/api/webhooks/815708355371860069/gy3_edx9paMdTg6f-0WL2qOlWnGKalV_10SPwK3jjdWV3f4dPSbvLStyDmClkAVQBRgu"
+      System: ""
 
     GitHub:
-      ShimariData: "https://raw.githubusercontent.com/Drageast/shimari-data/master/shimari.yaml"
-      Balancing: "https://raw.githubusercontent.com/Drageast/shimari-data/master/balancing.yaml"
+      ShimariData: ""
+      Balancing: ""
 
     Channels:
-      Shimari: "shimari"
-      Shimari_TEST: 837727003209760819
+      Shimari: ""
+      Shimari_TEST: ""
 
     MongoDB:
-      URL: "mongodb+srv://Drageast:Schmidt04@cluster0.r1bgi.mongodb.net/Adenn?retryWrites=true&w=majority"
-      Base: "Adenn"
-      Connection1: "Ticket"
-      Connection2: "Uccounts"
+      URL: ""
+      Base: ""
+      Connection1: ""
+      Connection2: ""
 
-  Developer: [431017472083099660, 440136099235364864]
+  Developer: []
 
   API:
-    NASA: "zvpl6l45Kx7tFk1houKoBdtiIba6wexuphZFjZ0N"
-    Google: "AIzaSyC_H3iPD44OQneMTTJigL9WEpHfH-7TblU"
-    Google_ID: "869d2dcdf80a96e4f"
+    NASA: ""
+    Google: ""
+    Google_ID: ""
 
 Bilder:
 
